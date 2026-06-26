@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Throne & Liberty Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f1a;
+            color: #eee;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        #app {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #1a1a2e;
+            padding: 20px 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+            width: 100%;
+        }
+        h1 {
+            color: #f0c27f;
+            text-align: center;
+            margin-bottom: 2px;
+            font-size: 1.8rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+        .top-bar {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            background: #252540;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+        .progress-grid {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            flex: 2;
+        }
+        .progress-item {
+            flex: 1;
+            min-width: 60px;
+        }
+        .progress-label {
+            font-size: 0.7rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .progress-count {
+            font-weight: 700;
+            color: #f0c27f;
+            font-size: 0.95rem;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #3a3a5a;
+            border-radius: 4px;
+            margin-top: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #f0c27f;
+            border-radius: 4px;
+            transition: width 0.25s ease;
+        }
+        .countdown-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex: 1;
+            min-width: 180px;
+            justify-content: flex-end;
+        }
+        .countdown-item {
+            color: #aaa;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        .countdown-item span {
+            color: #f0c27f;
+            font-weight: 600;
+        }
+        .countdown-item .tz-label {
+            font-size: 0.6rem;
+            color: #666;
+            display: block;
+        }
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 10px;
+        }
+        @media (max-width: 700px) {
+            .checklist-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .section {
+            background: #252540;
+            padding: 14px 16px;
+            border-radius: 12px;
+        }
+        .section h2 {
+            color: #a8d8ea;
+            border-bottom: 2px solid #f0c27f;
+            padding-bottom: 6px;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .section h2 .badge {
+            font-size: 0.6rem;
+            background: #1a1a2e;
+            padding: 2px 12px;
+            border-radius: 20px;
+            color: #aaa;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+        .section ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 6px;
+        }
+        .section li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 10px;
+            margin: 2px 0;
+            background: #1a1a2e;
+            border-radius: 6px;
+            transition: 0.2s;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .section li:hover {
+            background: #30305a;
+        }
+        .section li .task-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 120px;
+        }
+        .section li input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #f0c27f;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .section li .task-text {
+            transition: 0.2s;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .section li.done .task-text {
+            text-decoration: line-through;
+            color: #777;
+        }
+        .section li.done {
+            opacity: 0.6;
+        }
+        .counter-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: #888;
+            background: #0f0f1a;
+            padding: 2px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            user-select: none;
+        }
+        .counter-group:hover {
+            background: #2a2a4a;
+        }
+        .counter-group .counter-num {
+            color: #f0c27f;
+            font-weight: 700;
+            min-width: 12px;
+            text-align: center;
+        }
+        .counter-group .counter-label {
+            font-size: 0.65rem;
+            color: #666;
+        }
+        .counter-group .counter-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0 2px;
+            line-height: 1;
+        }
+        .counter-group .counter-btn:hover {
+            color: #f0c27f;
+        }
+        .custom-timer-display {
+            font-size: 0.6rem;
+            color: #888;
+            background: #0f0f1a;
+            padding: 2px 10px;
+            border-radius: 10px;
+            white-space: nowrap;
+            min-width: 60px;
+            text-align: center;
+        }
+        .custom-timer-display .time-label {
+            color: #f0c27f;
+            font-weight: 600;
+        }
+        .custom-timer-display .countdown-live {
+            color: #ffa726;
+            font-weight: 600;
+        }
+        .custom-timer-display .countdown-done {
+            color: #4caf50;
+            font-weight: 600;
+        }
+        .delete-btn {
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .delete-btn:hover {
+            opacity: 1;
+        }
+        .custom-section {
+            grid-column: 1 / -1;
+        }
+        .add-task-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            background: #1a1a2e;
+            padding: 12px 14px;
+            border-radius: 10px;
+            align-items: flex-end;
+        }
+        .add-task-row .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            min-width: 80px;
+        }
+        .add-task-row .field-group label {
+            font-size: 0.6rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .add-task-row input,
+        .add-task-row select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #3a3a5a;
+            background: #0f0f1a;
+            color: #eee;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+        .add-task-row input:focus,
+        .add-task-row select:focus {
+            outline: 2px solid #f0c27f;
+        }
+        .add-task-row input[type="datetime-local"] {
+            color-scheme: dark;
+        }
+        .add-task-row .field-group-small {
+            flex: 0.5;
+            min-width: 60px;
+        }
+        .btn {
+            padding: 6px 18px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-primary {
+            background: #f0c27f;
+            color: #1a1a2e;
+        }
+        .btn-primary:hover {
+            background: #d4a85a;
+        }
+        .btn-danger {
+            background: #ff6b6b;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #e05555;
+        }
+        .btn-warning {
+            background: #ffa726;
+            color: #1a1a2e;
+        }
+        .btn-warning:hover {
+            background: #fb8c00;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+        .footer-text {
+            margin-top: 16px;
+            font-size: 0.7rem;
+            color: #555;
+            text-align: center;
+        }
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+        .reset-area {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #2a2a4a;
+        }
+        .reset-area .last-reset {
+            font-size: 0.75rem;
+            color: #666;
+            flex: 1;
+        }
+        .tz-display {
+            font-size: 0.7rem;
+            color: #666;
+            text-align: center;
+            margin-top: 4px;
+        }
+        @media (max-width: 480px) {
+            #app {
+                padding: 12px;
+            }
+            .top-bar {
+                flex-direction: column;
+            }
+            .countdown-grid {
+                justify-content: flex-start;
+            }
+            .add-task-row {
+                flex-direction: column;
+            }
+            .add-task-row .field-group {
+                min-width: 100%;
+            }
+        }
+        .task-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>🗡️ TL Tracker</h1>
+        <div class="subtitle">Daily · Weekly · Monthly</div>
+
+        <!-- ===== TOP BAR ===== -->
+        <div class="top-bar">
+            <div class="progress-grid">
+                <div class="progress-item">
+                    <div class="progress-label">Daily</div>
+                    <div class="progress-count" id="dailyCount">0 / 0</div>
+                    <div class="progress-bar"><div class="progress-fill" id="dailyFill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Weekly</div>
+                    <div class="progress-count" id="weeklyCount">0 / 0</div>
+                    <div class="progress-bar"><div class="progress-fill" id="weeklyFill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Monthly</div>
+                    <div class="progress-count" id="monthlyCount">0 / 0</div>
+                    <div class="progress-bar"><div class="progress-fill" id="monthlyFill" style="width:0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Custom</div>
+                    <div class="progress-count" id="customCount">0 / 0</div>
+                    <div class="progress-bar"><div class="progress-fill" id="customFill" style="width:0%"></div></div>
+                </div>
+            </div>
+            <div class="countdown-grid" id="countdownGrid">
+                <div class="countdown-item">
+                    ⏳ Daily: <span id="dailyTimer">--</span>
+                    <span class="tz-label" id="dailyTz"></span>
+                </div>
+                <div class="countdown-item">
+                    ⏳ Weekly: <span id="weeklyTimer">--</span>
+                    <span class="tz-label" id="weeklyTz"></span>
+                </div>
+                <div class="countdown-item">
+                    ⏳ Monthly: <span id="monthlyTimer">--</span>
+                    <span class="tz-label" id="monthlyTz"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TWO-COLUMN CHECKLIST ===== -->
+        <div class="checklist-grid">
+            <!-- LEFT: DAILY -->
+            <div class="section" id="dailySection">
+                <h2>📅 Daily <span class="badge" id="dailyBadge">Resets: 08:00 UTC</span></h2>
+                <ul id="dailyList"></ul>
+            </div>
+
+            <!-- RIGHT: WEEKLY + MONTHLY stacked -->
+            <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="section" id="weeklySection">
+                    <h2>📆 Weekly <span class="badge" id="weeklyBadge">Resets: Tuesday 08:00 UTC</span></h2>
+                    <ul id="weeklyList"></ul>
+                </div>
+                <div class="section" id="monthlySection">
+                    <h2>📆 Monthly <span class="badge" id="monthlyBadge">Resets: 1st 08:00 UTC</span></h2>
+                    <ul id="monthlyList"></ul>
+                </div>
+            </div>
+
+            <!-- BOTTOM: CUSTOM -->
+            <div class="section custom-section" id="customSection">
+                <h2>✨ Custom <span class="badge">Your tasks with custom timers</span></h2>
+                <ul id="customList"></ul>
+            </div>
+        </div>
+
+        <!-- ===== ADD CUSTOM TASK ===== -->
+        <div class="add-task-row">
+            <div class="field-group" style="flex:2;">
+                <label>Task Name</label>
+                <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, 5x Training, Amitoi" />
+            </div>
+            <div class="field-group">
+                <label>Reset at (Date &amp; Time)</label>
+                <input type="datetime-local" id="customTaskDateTime" />
+            </div>
+            <div class="field-group field-group-small">
+                <label>Countdown (Hours:Minutes)</label>
+                <input type="text" id="customTaskCountdown" placeholder="6:21" />
+            </div>
+            <div class="field-group" style="flex:0.5; min-width:60px;">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" id="addTaskBtn" style="width:100%;">➕ Add</button>
+            </div>
+        </div>
+        <div id="errorMsg" class="error-msg"></div>
+        <div style="font-size:0.65rem; color:#555; margin-top:4px; padding-left:4px;">
+            💡 Set a <strong>date &amp; time</strong> for a one-time reset, OR set a <strong>countdown</strong> (e.g., 6:21 for 6 hours 21 minutes) for a recurring timer. Timer starts when you <strong>check the task as done</strong>.
+        </div>
+
+        <!-- ===== RESET AREA ===== -->
+        <div class="reset-area">
+            <button class="btn btn-danger" id="resetAllBtn">🔄 Reset All</button>
+            <button class="btn btn-warning" id="resetCustomBtn">🗑️ Delete All Custom</button>
+            <span class="last-reset" id="lastResetDisplay">Last reset: --</span>
+        </div>
+
+        <div class="tz-display" id="tzDisplay">All times in UTC · Reset at 08:00 UTC</div>
+        <div class="footer-text">💾 Auto-saves to your browser · Data stays on this device</div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  CONFIG - Reset at 08:00 UTC
+        // ============================================================
+        function getDailyReset() {
+            const now = new Date();
+            const reset = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 8, 0, 0, 0));
+            if (now >= reset) reset.setUTCDate(reset.getUTCDate() + 1);
+            return reset;
+        }
+
+        function getWeeklyReset() {
+            const now = new Date();
+            const reset = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 8, 0, 0, 0));
+            const daysUntilTuesday = (2 - now.getUTCDay() + 7) % 7;
+            reset.setUTCDate(reset.getUTCDate() + daysUntilTuesday);
+            if (now >= reset) reset.setUTCDate(reset.getUTCDate() + 7);
+            return reset;
+        }
+
+        function getMonthlyReset() {
+            const now = new Date();
+            const reset = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 8, 0, 0, 0));
+            if (now >= reset) reset.setUTCMonth(reset.getUTCMonth() + 1);
+            return reset;
+        }
+
+        function getUTCString() {
+            return 'UTC';
+        }
+
+        function formatCountdown(ms) {
+            if (ms <= 0) return '🔴 NOW!';
+            const d = Math.floor(ms / 86400000);
+            const h = Math.floor((ms % 86400000) / 3600000);
+            const m = Math.floor((ms % 3600000) / 60000);
+            const s = Math.floor((ms % 60000) / 1000);
+            let parts = [];
+            if (d > 0) parts.push(d + 'd');
+            if (h > 0 || parts.length > 0) parts.push(h + 'h');
+            if (m > 0 || parts.length > 0) parts.push(m + 'm');
+            parts.push(s + 's');
+            return parts.join(' ');
+        }
+
+        function formatCountdownShort(ms) {
+            if (ms <= 0) return '0s';
+            const h = Math.floor(ms / 3600000);
+            const m = Math.floor((ms % 3600000) / 60000);
+            const s = Math.floor((ms % 60000) / 1000);
+            let parts = [];
+            if (h > 0) parts.push(h + 'h');
+            if (m > 0 || parts.length > 0) parts.push(m + 'm');
+            parts.push(s + 's');
+            return parts.join(' ');
+        }
+
+        function parseCountdownInput(input) {
+            if (!input) return null;
+            const trimmed = input.trim();
+            const match = trimmed.match(/^(\d+):(\d+)$/);
+            if (match) {
+                const hours = parseInt(match[1]) || 0;
+                const mins = parseInt(match[2]) || 0;
+                const totalMinutes = hours * 60 + mins;
+                if (totalMinutes > 0) return totalMinutes * 60 * 1000;
+            }
+            const num = parseFloat(trimmed);
+            if (!isNaN(num) && num > 0) {
+                return num * 60 * 60 * 1000;
+            }
+            return null;
+        }
+
+        function generateId() {
+            return 't_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+        }
+
+        // ============================================================
+        //  STORAGE
+        // ============================================================
+        function loadData() {
+            try {
+                const raw = localStorage.getItem('tl_data_v6');
+                if (raw) return JSON.parse(raw);
+            } catch (_) { /* ignore */ }
+            return null;
+        }
+
+        function saveData(data) {
+            localStorage.setItem('tl_data_v6', JSON.stringify(data));
+        }
+
+        function getTaskKey(taskId, group) {
+            return 'tl_task_' + group + '_' + taskId;
+        }
+
+        function getTaskState(taskId, group) {
+            const key = getTaskKey(taskId, group);
+            return localStorage.getItem(key) === 'true';
+        }
+
+        function setTaskState(taskId, group, checked) {
+            const key = getTaskKey(taskId, group);
+            localStorage.setItem(key, checked ? 'true' : 'false');
+        }
+
+        function getCounterKey(taskId) {
+            return 'tl_counter_' + taskId;
+        }
+
+        function getCounterValue(taskId) {
+            const val = localStorage.getItem(getCounterKey(taskId));
+            return val ? parseInt(val) || 0 : 0;
+        }
+
+        function setCounterValue(taskId, value) {
+            localStorage.setItem(getCounterKey(taskId), value.toString());
+        }
+
+        function getTimerStartKey(taskId) {
+            return 'tl_timer_start_' + taskId;
+        }
+
+        function getTimerStart(taskId) {
+            const val = localStorage.getItem(getTimerStartKey(taskId));
+            return val ? parseInt(val) : null;
+        }
+
+        function setTimerStart(taskId, time) {
+            localStorage.setItem(getTimerStartKey(taskId), time.toString());
+        }
+
+        function clearTimerStart(taskId) {
+            localStorage.removeItem(getTimerStartKey(taskId));
+        }
+
+        function getTimerDurationKey(taskId) {
+            return 'tl_timer_duration_' + taskId;
+        }
+
+        function getTimerDuration(taskId) {
+            const val = localStorage.getItem(getTimerDurationKey(taskId));
+            return val ? parseInt(val) : null;
+        }
+
+        function setTimerDuration(taskId, duration) {
+            localStorage.setItem(getTimerDurationKey(taskId), duration.toString());
+        }
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let state = {
+            tasks: {
+                daily: [],
+                weekly: [],
+                monthly: [],
+                custom: []
+            }
+        };
+
+        // ============================================================
+        //  DEFAULT TASKS
+        // ============================================================
+        const DEFAULT_TASKS = {
+            daily: [
+                { name: '10 Resistance Contracts', hasCounter: true, maxCount: 10 },
+                { name: '3 Co-op Dungeons', hasCounter: true, maxCount: 3 },
+                { name: 'Abyssal Token burn', hasCounter: false, maxCount: 0 },
+                { name: 'Mystic Keys', hasCounter: false, maxCount: 0 },
+                { name: 'Precious Blessing Pouch', hasCounter: false, maxCount: 0 },
+                { name: 'Recovery Crystals', hasCounter: false, maxCount: 0 },
+                { name: 'Mana Potions', hasCounter: false, maxCount: 0 },
+                { name: 'Eggs', hasCounter: false, maxCount: 0 },
+                { name: 'Golden Rye', hasCounter: false, maxCount: 0 },
+                { name: 'Honey', hasCounter: false, maxCount: 0 },
+                { name: 'Fishing Bait', hasCounter: false, maxCount: 0 },
+                { name: 'Guild Check-in', hasCounter: false, maxCount: 0 },
+                { name: 'Guild Donation', hasCounter: false, maxCount: 0 }
+            ],
+            weekly: [
+                { name: 'Weekly Missions', hasCounter: false, maxCount: 0 },
+                { name: 'Resistance Contracts (7x)', hasCounter: true, maxCount: 7 },
+                { name: 'Boss Raids', hasCounter: false, maxCount: 0 },
+                { name: 'Dimensional Trials', hasCounter: false, maxCount: 0 }
+            ],
+            monthly: [
+                { name: 'Battle Pass progress', hasCounter: false, maxCount: 0 },
+                { name: 'Monthly task objectives', hasCounter: false, maxCount: 0 }
+            ]
+        };
+
+        // ============================================================
+        //  RENDER
+        // ============================================================
+        let liveTimerInterval = null;
+
+        function render() {
+            renderList('daily');
+            renderList('weekly');
+            renderList('monthly');
+            renderList('custom');
+            updateProgress();
+            updateCountdowns();
+            updateLastReset();
+            updateTimezoneDisplay();
+            updateBadges();
+            startLiveTimers();
+        }
+
+        function renderList(group) {
+            const list = document.getElementById(group + 'List');
+            const tasks = state.tasks[group] || [];
+            list.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                const isChecked = getTaskState(task.id, group);
+                if (isChecked) li.classList.add('done');
+
+                const left = document.createElement('div');
+                left.className = 'task-left';
+
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.checked = isChecked;
+                cb.dataset.taskId = task.id;
+                cb.addEventListener('change', function() {
+                    if (group === 'custom' && task.customTimer && task.customTimer.type === 'countdown') {
+                        if (this.checked) {
+                            setTimerStart(task.id, Date.now());
+                            setTimerDuration(task.id, task.customTimer.durationMs);
+                        } else {
+                            clearTimerStart(task.id);
+                        }
+                    }
+                    setTaskState(task.id, group, this.checked);
+                    if (this.checked) li.classList.add('done');
+                    else li.classList.remove('done');
+                    updateProgress();
+                });
+                left.appendChild(cb);
+
+                const span = document.createElement('span');
+                span.className = 'task-text';
+                span.textContent = task.name;
+                left.appendChild(span);
+
+                li.appendChild(left);
+
+                const right = document.createElement('div');
+                right.className = 'task-right';
+
+                if (task.hasCounter && task.maxCount > 0) {
+                    const counterGroup = document.createElement('div');
+                    counterGroup.className = 'counter-group';
+
+                    const minusBtn = document.createElement('button');
+                    minusBtn.className = 'counter-btn';
+                    minusBtn.textContent = '−';
+                    minusBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        let val = getCounterValue(task.id);
+                        if (val > 0) {
+                            val--;
+                            setCounterValue(task.id, val);
+                            updateCounterDisplay(counterGroup, val, task.maxCount);
+                            if (val === 0) {
+                                setTaskState(task.id, group, false);
+                                li.classList.remove('done');
+                                cb.checked = false;
+                                if (group === 'custom' && task.customTimer && task.customTimer.type ===
+                                    'countdown') {
+                                    clearTimerStart(task.id);
+                                }
+                            }
+                            updateProgress();
+                        }
+                    });
+                    counterGroup.appendChild(minusBtn);
+
+                    const numSpan = document.createElement('span');
+                    numSpan.className = 'counter-num';
+                    const currentVal = getCounterValue(task.id);
+                    numSpan.textContent = currentVal;
+                    counterGroup.appendChild(numSpan);
+
+                    const maxSpan = document.createElement('span');
+                    maxSpan.className = 'counter-label';
+                    maxSpan.textContent = '/' + task.maxCount;
+                    counterGroup.appendChild(maxSpan);
+
+                    const plusBtn = document.createElement('button');
+                    plusBtn.className = 'counter-btn';
+                    plusBtn.textContent = '+';
+                    plusBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        let val = getCounterValue(task.id);
+                        if (val < task.maxCount) {
+                            val++;
+                            setCounterValue(task.id, val);
+                            updateCounterDisplay(counterGroup, val, task.maxCount);
+                            if (val >= task.maxCount) {
+                                setTaskState(task.id, group, true);
+                                li.classList.add('done');
+                                cb.checked = true;
+                                if (group === 'custom' && task.customTimer && task.customTimer.type ===
+                                    'countdown') {
+                                    setTimerStart(task.id, Date.now());
+                                    setTimerDuration(task.id, task.customTimer.durationMs);
+                                }
+                            } else {
+                                setTaskState(task.id, group, false);
+                                li.classList.remove('done');
+                                cb.checked = false;
+                                if (group === 'custom' && task.customTimer && task.customTimer.type ===
+                                    'countdown') {
+                                    clearTimerStart(task.id);
+                                }
+                            }
+                            updateProgress();
+                        }
+                    });
+                    counterGroup.appendChild(plusBtn);
+
+                    right.appendChild(counterGroup);
+                }
+
+                if (group === 'custom' && task.customTimer) {
+                    const timerDisplay = document.createElement('span');
+                    timerDisplay.className = 'custom-timer-display';
+                    timerDisplay.id = 'timer_' + task.id;
+
+                    let displayText = '';
+                    if (task.customTimer.type === 'datetime') {
+                        const d = new Date(task.customTimer.value);
+                        if (!isNaN(d)) {
+                            displayText = '📅 ' + d.toLocaleString(undefined, {
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                        }
+                    } else if (task.customTimer.type === 'countdown') {
+                        const durationMs = task.customTimer.durationMs;
+                        const startTime = getTimerStart(task.id);
+                        const isChecked = getTaskState(task.id, group);
+
+                        if (isChecked && startTime) {
+                            const elapsed = Date.now() - startTime;
+                            const remaining = Math.max(0, durationMs - elapsed);
+                            if (remaining > 0) {
+                                displayText = '⏱️ <span class="countdown-live">' + formatCountdownShort(remaining) +
+                                    '</span>';
+                            } else {
+                                displayText = '✅ <span class="countdown-done">Done! Click to reset</span>';
+                            }
+                        } else if (isChecked) {
+                            displayText = '⏱️ <span class="countdown-live">Waiting...</span>';
+                        } else {
+                            const h = Math.floor(durationMs / 3600000);
+                            const m = Math.floor((durationMs % 3600000) / 60000);
+                            displayText = '⏱️ ' + h + 'h ' + m + 'm (check to start)';
+                        }
+                    } else {
+                        displayText = 'No auto-reset';
+                    }
+
+                    timerDisplay.innerHTML = displayText;
+                    right.appendChild(timerDisplay);
+
+                    const del = document.createElement('button');
+                    del.className = 'delete-btn';
+                    del.textContent = '✕';
+                    del.addEventListener('click', function() {
+                        if (confirm('Delete "' + task.name + '"?')) {
+                            state.tasks.custom = state.tasks.custom.filter(t => t.id !== task.id);
+                            localStorage.removeItem(getTaskKey(task.id, 'custom'));
+                            localStorage.removeItem(getCounterKey(task.id));
+                            clearTimerStart(task.id);
+                            localStorage.removeItem(getTimerDurationKey(task.id));
+                            saveData(state);
+                            render();
+                        }
+                    });
+                    right.appendChild(del);
+                }
+
+                if (group === 'custom' && !task.customTimer) {
+                    const del = document.createElement('button');
+                    del.className = 'delete-btn';
+                    del.textContent = '✕';
+                    del.addEventListener('click', function() {
+                        if (confirm('Delete "' + task.name + '"?')) {
+                            state.tasks.custom = state.tasks.custom.filter(t => t.id !== task.id);
+                            localStorage.removeItem(getTaskKey(task.id, 'custom'));
+                            localStorage.removeItem(getCounterKey(task.id));
+                            saveData(state);
+                            render();
+                        }
+                    });
+                    right.appendChild(del);
+                }
+
+                li.appendChild(right);
+                list.appendChild(li);
+            });
+        }
+
+        function updateCounterDisplay(container, val, max) {
+            const numSpan = container.querySelector('.counter-num');
+            if (numSpan) numSpan.textContent = val;
+        }
+
+        function updateProgress() {
+            const groups = ['daily', 'weekly', 'monthly', 'custom'];
+            groups.forEach(group => {
+                const tasks = state.tasks[group] || [];
+                let total = 0;
+                let done = 0;
+                tasks.forEach(t => {
+                    if (t.hasCounter && t.maxCount > 0) {
+                        const val = getCounterValue(t.id);
+                        if (val >= t.maxCount) done++;
+                        total++;
+                    } else {
+                        total++;
+                        if (getTaskState(t.id, group)) done++;
+                    }
+                });
+                document.getElementById(group + 'Count').textContent = done + ' / ' + total;
+                const fill = document.getElementById(group + 'Fill');
+                fill.style.width = total > 0 ? (done / total) * 100 + '%' : '0%';
+            });
+        }
+
+        function updateCountdowns() {
+            const now = new Date();
+            document.getElementById('dailyTimer').textContent = formatCountdown(getDailyReset() - now);
+            document.getElementById('weeklyTimer').textContent = formatCountdown(getWeeklyReset() - now);
+            document.getElementById('monthlyTimer').textContent = formatCountdown(getMonthlyReset() - now);
+        }
+
+        function updateBadges() {
+            document.getElementById('dailyBadge').textContent = 'Resets: 08:00 UTC';
+            document.getElementById('weeklyBadge').textContent = 'Resets: Tuesday 08:00 UTC';
+            document.getElementById('monthlyBadge').textContent = 'Resets: 1st 08:00 UTC';
+            document.getElementById('dailyTz').textContent = '08:00 UTC';
+            document.getElementById('weeklyTz').textContent = 'Tue 08:00 UTC';
+            document.getElementById('monthlyTz').textContent = '1st 08:00 UTC';
+        }
+
+        function updateLastReset() {
+            const last = localStorage.getItem('tl_last_reset_time_v6');
+            if (last) {
+                try {
+                    const d = new Date(parseInt(last));
+                    document.getElementById('lastResetDisplay').textContent = 'Last reset: ' + d.toLocaleString();
+                } catch (_) {
+                    document.getElementById('lastResetDisplay').textContent = 'Last reset: --';
+                }
+            } else {
+                document.getElementById('lastResetDisplay').textContent = 'Last reset: --';
+            }
+        }
+
+        function updateTimezoneDisplay() {
+            document.getElementById('tzDisplay').textContent = '🕐 All times in UTC · Reset at 08:00 UTC';
+        }
+
+        // ============================================================
+        //  LIVE TIMERS
+        // ============================================================
+        function startLiveTimers() {
+            if (liveTimerInterval) clearInterval(liveTimerInterval);
+            liveTimerInterval = setInterval(function() {
+                updateLiveTimers();
+            }, 1000);
+            updateLiveTimers();
+        }
+
+        function updateLiveTimers() {
+            const customTasks = state.tasks.custom || [];
+            customTasks.forEach(task => {
+                if (task.customTimer && task.customTimer.type === 'countdown') {
+                    const timerDisplay = document.getElementById('timer_' + task.id);
+                    if (!timerDisplay) return;
+
+                    const durationMs = task.customTimer.durationMs;
+                    const startTime = getTimerStart(task.id);
+                    const isChecked = getTaskState(task.id, 'custom');
+
+                    let displayText = '';
+                    if (isChecked && startTime) {
+                        const elapsed = Date.now() - startTime;
+                        const remaining = Math.max(0, durationMs - elapsed);
+                        if (remaining > 0) {
+                            displayText = '⏱️ <span class="countdown-live">' + formatCountdownShort(remaining) +
+                                '</span>';
+                        } else {
+                            displayText = '✅ <span class="countdown-done">Ready to reset!</span>';
+                        }
+                    } else if (isChecked) {
+                        displayText = '⏱️ <span class="countdown-live">Waiting...</span>';
+                    } else {
+                        const h = Math.floor(durationMs / 3600000);
+                        const m = Math.floor((durationMs % 3600000) / 60000);
+                        displayText = '⏱️ ' + h + 'h ' + m + 'm (check to start)';
+                    }
+                    timerDisplay.innerHTML = displayText;
+                }
+            });
+        }
+
+        // ============================================================
+        //  RESET LOGIC - FIXED VERSION
+        // ============================================================
+        function checkResets() {
+            const now = new Date();
+            let changed = false;
+
+            // Daily reset
+            const dailyReset = getDailyReset();
+            const dailyKey = 'tl_reset_daily_v6_' + dailyReset.toISOString().split('T')[0];
+            if (now >= dailyReset && !localStorage.getItem(dailyKey)) {
+                state.tasks.daily.forEach(t => {
+                    setTaskState(t.id, 'daily', false);
+                    if (t.hasCounter) setCounterValue(t.id, 0);
+                });
+                localStorage.setItem(dailyKey, 'true');
+                changed = true;
+                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+            }
+
+            // Weekly reset
+            const weeklyReset = getWeeklyReset();
+            const weeklyKey = 'tl_reset_weekly_v6_' + weeklyReset.toISOString().split('T')[0];
+            if (now >= weeklyReset && !localStorage.getItem(weeklyKey)) {
+                state.tasks.weekly.forEach(t => {
+                    setTaskState(t.id, 'weekly', false);
+                    if (t.hasCounter) setCounterValue(t.id, 0);
+                });
+                localStorage.setItem(weeklyKey, 'true');
+                changed = true;
+                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+            }
+
+            // Monthly reset
+            const monthlyReset = getMonthlyReset();
+            const monthlyKey = 'tl_reset_monthly_v6_' + monthlyReset.toISOString().split('T')[0];
+            if (now >= monthlyReset && !localStorage.getItem(monthlyKey)) {
+                state.tasks.monthly.forEach(t => {
+                    setTaskState(t.id, 'monthly', false);
+                    if (t.hasCounter) setCounterValue(t.id, 0);
+                });
+                localStorage.setItem(monthlyKey, 'true');
+                changed = true;
+                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+            }
+
+            // Custom task resets
+            state.tasks.custom.forEach(t => {
+                if (t.customTimer) {
+                    if (t.customTimer.type === 'datetime') {
+                        const resetTime = new Date(t.customTimer.value);
+                        const key = 'tl_custom_reset_' + t.id + '_' + resetTime.toISOString().split('T')[0];
+                        if (!isNaN(resetTime) && now >= resetTime && !localStorage.getItem(key)) {
+                            setTaskState(t.id, 'custom', false);
+                            if (t.hasCounter) setCounterValue(t.id, 0);
+                            localStorage.setItem(key, 'true');
+                            changed = true;
+                            localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                        }
+                    } else if (t.customTimer.type === 'countdown') {
+                        const durationMs = t.customTimer.durationMs;
+                        const startTime = getTimerStart(t.id);
+                        if (startTime && durationMs) {
+                            const elapsed = now.getTime() - startTime;
+                            if (elapsed >= durationMs) {
+                                setTaskState(t.id, 'custom', false);
+                                if (t.hasCounter) setCounterValue(t.id, 0);
+                                clearTimerStart(t.id);
+                                const list = document.getElementById('customList');
+                                const items = list.querySelectorAll('li');
+                                items.forEach(li => {
+                                    const cb = li.querySelector('input[type="checkbox"]');
+                                    if (cb && cb.dataset.taskId === t.id) {
+                                        cb.checked = false;
+                                        li.classList.remove('done');
+                                    }
+                                });
+                                changed = true;
+                                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                            }
+                        }
+                    }
+                }
+            });
+
+            if (changed) {
+                saveData(state);
+                render();
+            }
+        }
+
+        // ============================================================
+        //  SAVE / LOAD STATE
+        // ============================================================
+        function saveState() {
+            saveData(state);
+        }
+
+        function loadState() {
+            const saved = loadData();
+            if (saved && saved.tasks) {
+                const groups = ['daily', 'weekly', 'monthly'];
+                groups.forEach(g => {
+                    const defaultItems = DEFAULT_TASKS[g] || [];
+                    const savedItems = saved.tasks[g] || [];
+                    const merged = defaultItems.map(def => {
+                        const existing = savedItems.find(t => t.name === def.name);
+                        return existing ? existing : {
+                            id: generateId(),
+                            name: def.name,
+                            hasCounter: def.hasCounter || false,
+                            maxCount: def.maxCount || 0
+                        };
+                    });
+                    state.tasks[g] = merged;
+                });
+                state.tasks.custom = saved.tasks.custom || [];
+            } else {
+                ['daily', 'weekly', 'monthly'].forEach(g => {
+                    state.tasks[g] = DEFAULT_TASKS[g].map(def => ({
+                        id: generateId(),
+                        name: def.name,
+                        hasCounter: def.hasCounter || false,
+                        maxCount: def.maxCount || 0
+                    }));
+                });
+                state.tasks.custom = [];
+            }
+            saveState();
+        }
+
+        // ============================================================
+        //  ADD CUSTOM TASK
+        // ============================================================
+        function addCustomTask() {
+            const input = document.getElementById('customTaskInput');
+            const dateTimeInput = document.getElementById('customTaskDateTime');
+            const countdownInput = document.getElementById('customTaskCountdown');
+            const error = document.getElementById('errorMsg');
+            const name = input.value.trim();
+
+            if (!name) {
+                error.textContent = '⚠️ Please enter a task name.';
+                return;
+            }
+            error.textContent = '';
+
+            let customTimer = null;
+            const dateTimeValue = dateTimeInput.value;
+            const countdownValue = countdownInput.value;
+
+            if (dateTimeValue) {
+                customTimer = {
+                    type: 'datetime',
+                    value: dateTimeValue
+                };
+            } else if (countdownValue) {
+                const durationMs = parseCountdownInput(countdownValue);
+                if (durationMs && durationMs > 0) {
+                    customTimer = {
+                        type: 'countdown',
+                        durationMs: durationMs,
+                        display: countdownValue
+                    };
+                } else {
+                    error.textContent = '⚠️ Invalid countdown format. Use HH:MM or a number (hours).';
+                    return;
+                }
+            }
+
+            let hasCounter = false;
+            let maxCount = 0;
+            const match = name.match(/(\d+)\s*[xX×*]\s*/);
+            if (match) {
+                hasCounter = true;
+                maxCount = parseInt(match[1]) || 0;
+            }
+
+            const task = {
+                id: generateId(),
+                name: name,
+                hasCounter: hasCounter,
+                maxCount: maxCount || 0,
+                customTimer: customTimer
+            };
+
+            state.tasks.custom.push(task);
+            saveState();
+            render();
+            input.value = '';
+            dateTimeInput.value = '';
+            countdownInput.value = '';
+            input.focus();
+        }
+
+        // ============================================================
+        //  RESET / DELETE
+        // ============================================================
+        function resetAll() {
+            if (!confirm('Reset ALL tasks (including custom)?')) return;
+            ['daily', 'weekly', 'monthly', 'custom'].forEach(g => {
+                state.tasks[g].forEach(t => {
+                    setTaskState(t.id, g, false);
+                    if (t.hasCounter) setCounterValue(t.id, 0);
+                    clearTimerStart(t.id);
+                });
+            });
+            const now = new Date();
+            localStorage.setItem('tl_reset_daily_v6_' + getDailyReset().toISOString().split('T')[0], 'true');
+            localStorage.setItem('tl_reset_weekly_v6_' + getWeeklyReset().toISOString().split('T')[0], 'true');
+            localStorage.setItem('tl_reset_monthly_v6_' + getMonthlyReset().toISOString().split('T')[0], 'true');
+            localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+            render();
+        }
+
+        function deleteAllCustom() {
+            if (!confirm('Delete ALL custom tasks?')) return;
+            state.tasks.custom.forEach(t => {
+                localStorage.removeItem(getTaskKey(t.id, 'custom'));
+                localStorage.removeItem(getCounterKey(t.id));
+                clearTimerStart(t.id);
+                localStorage.removeItem(getTimerDurationKey(t.id));
+            });
+            state.tasks.custom = [];
+            saveState();
+            render();
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadState();
+            checkResets();
+            render();
+
+            setInterval(function() {
+                updateCountdowns();
+                checkResets();
+            }, 1000);
+
+            document.getElementById('addTaskBtn').addEventListener('click', addCustomTask);
+            document.getElementById('customTaskInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') addCustomTask();
+            });
+
+            document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+            document.getElementById('resetCustomBtn').addEventListener('click', deleteAllCustom);
+        });
+    </script>
+</body>
+</html>
