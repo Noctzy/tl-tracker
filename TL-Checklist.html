@@ -3,142 +3,445 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Throne & Liberty Tracker</title>
+    <title>T&L Tracker</title>
     <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            /* Default Dark Theme - Blackish */
+            --bg-body: #0a0a0f;
+            --bg-app: #111118;
+            --bg-card: #1a1a24;
+            --bg-input: #0a0a0f;
+            --bg-hover: #2a2a3a;
+            --bg-task: #0f0f18;
+            --text-primary: #eee;
+            --text-secondary: #aaa;
+            --text-muted: #666;
+            --border-color: #2a2a3a;
+            --accent-gold: #f0c27f;
+            --accent-blue: #4fc3f7;
+            --accent-teal: #a8d8ea;
+            --accent-green: #66bb6a;
+            --accent-red: #ff6b6b;
+            --accent-orange: #ffa726;
+            --accent-purple: #b388ff;
+            --shadow-color: rgba(0, 0, 0, 0.9);
+            --scrollbar-track: #1a1a24;
+            --scrollbar-thumb: #2a2a3a;
+            --sticky-width: 200px;
+        }
+
+        /* ===== LIGHT THEME ===== */
+        [data-theme="light"] {
+            --bg-body: #f0f0f0;
+            --bg-app: #ffffff;
+            --bg-card: #e8e8e8;
+            --bg-input: #f5f5f5;
+            --bg-hover: #d0d0d0;
+            --bg-task: #f5f5f5;
+            --text-primary: #222;
+            --text-secondary: #666;
+            --text-muted: #999;
+            --border-color: #ccc;
+            --accent-gold: #b8860b;
+            --accent-blue: #1a73e8;
+            --accent-teal: #008080;
+            --accent-purple: #7c4dff;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --scrollbar-track: #e8e8e8;
+            --scrollbar-thumb: #ccc;
+        }
+
+        /* ===== T&L THEME (Purple/Gold #342A42) ===== */
+        [data-theme="tl"] {
+            --bg-body: #342A42;
+            --bg-app: #3D304A;
+            --bg-card: #4A3D5A;
+            --bg-input: #342A42;
+            --bg-hover: #5A4D6A;
+            --bg-task: #3D304A;
+            --text-primary: #f0e8f0;
+            --text-secondary: #c8b8d8;
+            --text-muted: #9a8aaa;
+            --border-color: #5A4D6A;
+            --accent-gold: #d4a84a;
+            --accent-blue: #b388ff;
+            --accent-teal: #b388ff;
+            --accent-green: #b39ddb;
+            --accent-red: #ef9a9a;
+            --accent-orange: #ffcc80;
+            --accent-purple: #b388ff;
+            --shadow-color: rgba(0, 0, 0, 0.7);
+            --scrollbar-track: #3D304A;
+            --scrollbar-thumb: #5A4D6A;
+        }
+
+        /* ===== GENERAL STYLES ===== */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+        html {
+            font-size: 16px;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f0f1a;
-            color: #eee;
+            background: var(--bg-body);
+            color: var(--text-primary);
             min-height: 100vh;
             padding: 16px;
+            transition: background 0.3s, color 0.3s;
         }
         #app {
-            max-width: 1100px;
+            max-width: 1300px;
             margin: 0 auto;
-            background: #1a1a2e;
+            background: var(--bg-app);
             padding: 20px 24px;
             border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 8px 40px var(--shadow-color);
             width: 100%;
+            transition: background 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+        }
+
+        /* ===== HEADER ===== */
+        .header-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 4px;
+            position: relative;
         }
         h1 {
-            color: #f0c27f;
-            text-align: center;
-            margin-bottom: 2px;
+            color: var(--accent-gold);
             font-size: 1.8rem;
-        }
-        .subtitle {
+            transition: color 0.3s;
             text-align: center;
-            color: #888;
-            font-size: 0.85rem;
-            margin-bottom: 16px;
-        }
-        .top-bar {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            background: #252540;
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 14px;
-        }
-        .progress-grid {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            flex: 2;
-        }
-        .progress-item {
             flex: 1;
-            min-width: 60px;
         }
-        .progress-label {
+        .theme-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            position: absolute;
+            right: 0;
+        }
+        .theme-controls label {
             font-size: 0.7rem;
-            color: #aaa;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .progress-count {
-            font-weight: 700;
-            color: #f0c27f;
+        .theme-btn {
+            padding: 4px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.2s;
+        }
+        .theme-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+        }
+        .theme-btn.active {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
             font-size: 0.95rem;
+            margin-bottom: 16px;
+            transition: color 0.3s;
         }
-        .progress-bar {
-            width: 100%;
-            height: 5px;
-            background: #3a3a5a;
-            border-radius: 4px;
-            margin-top: 3px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: #f0c27f;
-            border-radius: 4px;
-            transition: width 0.25s ease;
-        }
-        .countdown-grid {
+
+        /* ===== THREE-COLUMN LAYOUT ===== */
+        .main-layout {
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 16px;
             flex: 1;
-            min-width: 180px;
-            justify-content: flex-end;
+            min-height: 400px;
         }
-        .countdown-item {
-            color: #aaa;
-            font-size: 0.8rem;
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .sticky-left,
+            .sticky-right {
+                position: static !important;
+                width: 100% !important;
+                min-width: unset !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+                padding: 12px !important;
+                background: var(--bg-card);
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+            .sticky-left .progress-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .sticky-right .countdown-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 8px;
+            }
+            .sticky-right .countdown-item {
+                border-bottom: none;
+                padding: 8px 0;
+                min-height: 60px;
+            }
+            .sticky-right .countdown-item .time {
+                font-size: 1rem;
+                min-width: 80px;
+            }
+        }
+        @media (max-width: 480px) {
+            .header-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            .theme-controls {
+                position: static;
+                justify-content: center;
+            }
+            .sticky-left .progress-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .sticky-right .countdown-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .sticky-right .countdown-item .time {
+                font-size: 0.9rem;
+                min-width: 70px;
+            }
+        }
+
+        /* ===== STICKY LEFT (Progress Bars) ===== */
+        .sticky-left {
+            width: var(--sticky-width);
+            min-width: 160px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 10px;
+            align-self: flex-start;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            padding-right: 4px;
+            transition: background 0.3s;
+        }
+        .sticky-left .progress-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sticky-left .progress-item {
+            background: var(--bg-card);
+            padding: 10px 14px;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+        .sticky-left .progress-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+        .sticky-left .progress-count {
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        .sticky-left .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-body);
+            border-radius: 4px;
+            margin-top: 4px;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+        .sticky-left .progress-fill {
+            height: 100%;
+            background: var(--accent-gold);
+            border-radius: 4px;
+            transition: width 0.25s ease, background 0.3s;
+        }
+
+        /* ===== STICKY RIGHT (Countdown Timers) ===== */
+        .sticky-right {
+            width: var(--sticky-width);
+            min-width: 200px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 10px;
+            align-self: flex-start;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            padding-left: 4px;
+            transition: background 0.3s;
+        }
+        .sticky-right .countdown-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: var(--bg-card);
+            padding: 16px 18px;
+            border-radius: 10px;
+            transition: background 0.3s;
+            min-width: 180px;
+        }
+        .sticky-right .countdown-item {
+            color: var(--text-secondary);
+            transition: color 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            min-height: 80px;
+            justify-content: center;
+        }
+        .sticky-right .countdown-item:last-child {
+            border-bottom: none;
+        }
+        .sticky-right .countdown-item .label-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sticky-right .countdown-item .label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+        .sticky-right .countdown-item .emoji {
+            font-size: 1.1rem;
+        }
+        .sticky-right .countdown-item .time-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 32px;
+        }
+        .sticky-right .countdown-item .time {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.5px;
+            min-width: 110px;
+            display: inline-block;
+        }
+        .sticky-right .countdown-item .tz-row {
+            display: flex;
+            align-items: center;
+            min-height: 20px;
+        }
+        .sticky-right .countdown-item .tz-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
+            background: var(--bg-input);
+            padding: 1px 12px;
+            border-radius: 10px;
+            display: inline-block;
             white-space: nowrap;
         }
-        .countdown-item span {
-            color: #f0c27f;
-            font-weight: 600;
+
+        /* ===== MIDDLE CONTENT ===== */
+        .middle-content {
+            flex: 1;
+            min-width: 0;
         }
-        .countdown-item .tz-label {
-            font-size: 0.6rem;
-            color: #666;
-            display: block;
-        }
+
+        /* ===== CHECKLIST GRID ===== */
         .checklist-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-top: 10px;
+            margin-top: 0;
         }
         @media (max-width: 700px) {
             .checklist-grid {
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ===== SECTIONS ===== */
         .section {
-            background: #252540;
+            background: var(--bg-card);
             padding: 14px 16px;
             border-radius: 12px;
+            transition: background 0.3s;
         }
         .section h2 {
-            color: #a8d8ea;
-            border-bottom: 2px solid #f0c27f;
+            color: var(--accent-teal);
+            border-bottom: 2px solid var(--accent-gold);
             padding-bottom: 6px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 6px;
+            transition: color 0.3s, border-color 0.3s;
         }
         .section h2 .badge {
-            font-size: 0.6rem;
-            background: #1a1a2e;
-            padding: 2px 12px;
+            font-size: 0.65rem;
+            background: var(--bg-input);
+            padding: 2px 14px;
             border-radius: 20px;
-            color: #aaa;
+            color: var(--text-secondary);
             font-weight: 400;
             letter-spacing: 0.3px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .section h2 .section-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .section h2 .section-actions button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .section h2 .section-actions button:hover {
+            background: var(--bg-hover);
+            color: var(--accent-gold);
         }
         .section ul {
             list-style: none;
@@ -149,130 +452,153 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 5px 10px;
-            margin: 2px 0;
-            background: #1a1a2e;
+            padding: 6px 12px;
+            margin: 3px 0;
+            background: var(--bg-task);
             border-radius: 6px;
-            transition: 0.2s;
+            transition: 0.2s, background 0.3s;
             gap: 8px;
             flex-wrap: wrap;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
         .section li:hover {
-            background: #30305a;
+            background: var(--bg-hover);
         }
         .section li .task-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex: 1;
             min-width: 120px;
         }
         .section li input[type="checkbox"] {
-            width: 17px;
-            height: 17px;
-            accent-color: #f0c27f;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-gold);
             cursor: pointer;
             flex-shrink: 0;
+            transition: accent-color 0.3s;
         }
         .section li .task-text {
-            transition: 0.2s;
-            font-size: 0.9rem;
-            cursor: pointer;
+            transition: 0.2s, color 0.3s;
+            font-size: 0.95rem;
         }
         .section li.done .task-text {
             text-decoration: line-through;
-            color: #777;
+            color: var(--text-secondary);
         }
         .section li.done {
             opacity: 0.6;
         }
+        .section li .task-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .section li .task-actions button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .section li .task-actions button:hover {
+            color: var(--accent-gold);
+            background: var(--bg-hover);
+        }
+        .section li .task-actions .delete-task-btn:hover {
+            color: var(--accent-red);
+        }
+
+        /* ===== COUNTER ===== */
         .counter-group {
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 0.75rem;
-            color: #888;
-            background: #0f0f1a;
-            padding: 2px 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-input);
+            padding: 2px 10px;
             border-radius: 12px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.2s, background 0.3s, color 0.3s;
             user-select: none;
         }
         .counter-group:hover {
-            background: #2a2a4a;
+            background: var(--bg-hover);
         }
         .counter-group .counter-num {
-            color: #f0c27f;
+            color: var(--accent-gold);
             font-weight: 700;
-            min-width: 12px;
+            min-width: 14px;
             text-align: center;
+            transition: color 0.3s;
         }
         .counter-group .counter-label {
-            font-size: 0.65rem;
-            color: #666;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
         }
         .counter-group .counter-btn {
             background: none;
             border: none;
-            color: #888;
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
             padding: 0 2px;
             line-height: 1;
+            transition: color 0.2s;
         }
         .counter-group .counter-btn:hover {
-            color: #f0c27f;
+            color: var(--accent-gold);
         }
+
+        /* ===== CUSTOM TIMER DISPLAY ===== */
         .custom-timer-display {
-            font-size: 0.6rem;
-            color: #888;
-            background: #0f0f1a;
-            padding: 2px 10px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            background: var(--bg-input);
+            padding: 2px 12px;
             border-radius: 10px;
             white-space: nowrap;
-            min-width: 60px;
+            min-width: 70px;
             text-align: center;
+            transition: background 0.3s, color 0.3s;
         }
         .custom-timer-display .time-label {
-            color: #f0c27f;
+            color: var(--accent-gold);
             font-weight: 600;
+            transition: color 0.3s;
         }
         .custom-timer-display .countdown-live {
-            color: #ffa726;
+            color: var(--accent-orange);
             font-weight: 600;
+            transition: color 0.3s;
         }
         .custom-timer-display .countdown-done {
-            color: #4caf50;
+            color: var(--accent-green);
             font-weight: 600;
-        }
-        .delete-btn {
-            background: #ff6b6b;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 2px 10px;
-            font-size: 11px;
-            cursor: pointer;
-            opacity: 0.4;
-            transition: 0.2s;
-            flex-shrink: 0;
-        }
-        .delete-btn:hover {
-            opacity: 1;
+            transition: color 0.3s;
         }
         .custom-section {
             grid-column: 1 / -1;
         }
+
+        /* ===== ADD TASK ROW ===== */
         .add-task-row {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             margin-top: 10px;
-            background: #1a1a2e;
+            background: var(--bg-card);
             padding: 12px 14px;
             border-radius: 10px;
             align-items: flex-end;
+            transition: background 0.3s;
         }
         .add-task-row .field-group {
             display: flex;
@@ -282,61 +608,72 @@
             min-width: 80px;
         }
         .add-task-row .field-group label {
-            font-size: 0.6rem;
-            color: #666;
+            font-size: 0.65rem;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            transition: color 0.3s;
         }
         .add-task-row input,
         .add-task-row select {
-            padding: 6px 10px;
+            padding: 7px 12px;
             border-radius: 6px;
-            border: 1px solid #3a3a5a;
-            background: #0f0f1a;
-            color: #eee;
-            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.9rem;
             width: 100%;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
         }
         .add-task-row input:focus,
         .add-task-row select:focus {
-            outline: 2px solid #f0c27f;
+            outline: 2px solid var(--accent-gold);
         }
         .add-task-row input[type="datetime-local"] {
             color-scheme: dark;
+        }
+        [data-theme="light"] .add-task-row input[type="datetime-local"] {
+            color-scheme: light;
         }
         .add-task-row .field-group-small {
             flex: 0.5;
             min-width: 60px;
         }
+
+        /* ===== BUTTONS ===== */
         .btn {
-            padding: 6px 18px;
+            padding: 7px 20px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
         .btn-primary {
-            background: #f0c27f;
+            background: var(--accent-gold);
             color: #1a1a2e;
         }
         .btn-primary:hover {
-            background: #d4a85a;
+            filter: brightness(1.1);
         }
         .btn-danger {
-            background: #ff6b6b;
+            background: var(--accent-red);
             color: #fff;
         }
         .btn-danger:hover {
-            background: #e05555;
+            filter: brightness(1.1);
         }
         .btn-warning {
-            background: #ffa726;
+            background: var(--accent-orange);
             color: #1a1a2e;
         }
         .btn-warning:hover {
-            background: #fb8c00;
+            filter: brightness(1.1);
+        }
+        .btn-sm {
+            padding: 4px 14px;
+            font-size: 0.75rem;
         }
         .btn-group {
             display: flex;
@@ -344,16 +681,20 @@
             flex-wrap: wrap;
             margin-top: 14px;
         }
+
+        /* ===== MISC ===== */
         .footer-text {
             margin-top: 16px;
-            font-size: 0.7rem;
-            color: #555;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             text-align: center;
+            transition: color 0.3s;
         }
         .error-msg {
-            color: #ff6b6b;
-            font-size: 0.8rem;
+            color: var(--accent-red);
+            font-size: 0.85rem;
             margin-top: 4px;
+            transition: color 0.3s;
         }
         .reset-area {
             display: flex;
@@ -362,28 +703,33 @@
             align-items: center;
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid #2a2a4a;
+            border-top: 1px solid var(--border-color);
+            transition: border-color 0.3s;
         }
         .reset-area .last-reset {
-            font-size: 0.75rem;
-            color: #666;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             flex: 1;
+            transition: color 0.3s;
         }
         .tz-display {
-            font-size: 0.7rem;
-            color: #666;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             text-align: center;
             margin-top: 4px;
+            transition: color 0.3s;
         }
+        .task-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             #app {
                 padding: 12px;
-            }
-            .top-bar {
-                flex-direction: column;
-            }
-            .countdown-grid {
-                justify-content: flex-start;
             }
             .add-task-row {
                 flex-direction: column;
@@ -392,122 +738,263 @@
                 min-width: 100%;
             }
         }
-        .task-right {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+
+        /* ===== SECTION QUICK ADD ===== */
+        .quick-add-row {
+            display: none;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--bg-input);
+            border-radius: 6px;
             flex-wrap: wrap;
+            transition: background 0.3s;
+        }
+        .quick-add-row.show {
+            display: flex;
+        }
+        .quick-add-row input {
+            flex: 1;
+            min-width: 80px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+        }
+        .quick-add-row input:focus {
+            outline: 2px solid var(--accent-gold);
+        }
+        .quick-add-row .btn {
+            padding: 4px 14px;
+            font-size: 0.75rem;
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <h1>🗡️ TL Tracker</h1>
-        <div class="subtitle">Daily · Weekly · Monthly</div>
-
-        <!-- ===== TOP BAR ===== -->
-        <div class="top-bar">
-            <div class="progress-grid">
-                <div class="progress-item">
-                    <div class="progress-label">Daily</div>
-                    <div class="progress-count" id="dailyCount">0 / 0</div>
-                    <div class="progress-bar"><div class="progress-fill" id="dailyFill" style="width:0%"></div></div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-label">Weekly</div>
-                    <div class="progress-count" id="weeklyCount">0 / 0</div>
-                    <div class="progress-bar"><div class="progress-fill" id="weeklyFill" style="width:0%"></div></div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-label">Monthly</div>
-                    <div class="progress-count" id="monthlyCount">0 / 0</div>
-                    <div class="progress-bar"><div class="progress-fill" id="monthlyFill" style="width:0%"></div></div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-label">Custom</div>
-                    <div class="progress-count" id="customCount">0 / 0</div>
-                    <div class="progress-bar"><div class="progress-fill" id="customFill" style="width:0%"></div></div>
-                </div>
-            </div>
-            <div class="countdown-grid" id="countdownGrid">
-                <div class="countdown-item">
-                    ⏳ Daily: <span id="dailyTimer">--</span>
-                    <span class="tz-label" id="dailyTz"></span>
-                </div>
-                <div class="countdown-item">
-                    ⏳ Weekly: <span id="weeklyTimer">--</span>
-                    <span class="tz-label" id="weeklyTz"></span>
-                </div>
-                <div class="countdown-item">
-                    ⏳ Monthly: <span id="monthlyTimer">--</span>
-                    <span class="tz-label" id="monthlyTz"></span>
-                </div>
+        <!-- ===== HEADER ===== -->
+        <div class="header-row">
+            <h1>⚔️ T&amp;L Tracker</h1>
+            <div class="theme-controls">
+                <label>Theme:</label>
+                <button class="theme-btn active" data-theme="dark">🌙 Dark</button>
+                <button class="theme-btn" data-theme="light">☀️ Light</button>
+                <button class="theme-btn" data-theme="tl">⚔️ T&amp;L</button>
             </div>
         </div>
+        <div class="subtitle">Daily · Weekly · Monthly — Auto-reset at 08:00 UTC</div>
 
-        <!-- ===== TWO-COLUMN CHECKLIST ===== -->
-        <div class="checklist-grid">
-            <!-- LEFT: DAILY -->
-            <div class="section" id="dailySection">
-                <h2>📅 Daily <span class="badge" id="dailyBadge">Resets: 08:00 UTC</span></h2>
-                <ul id="dailyList"></ul>
-            </div>
+        <!-- ===== THREE-COLUMN LAYOUT ===== -->
+        <div class="main-layout">
 
-            <!-- RIGHT: WEEKLY + MONTHLY stacked -->
-            <div style="display:flex;flex-direction:column;gap:16px;">
-                <div class="section" id="weeklySection">
-                    <h2>📆 Weekly <span class="badge" id="weeklyBadge">Resets: Tuesday 08:00 UTC</span></h2>
-                    <ul id="weeklyList"></ul>
+            <!-- ===== LEFT: STICKY PROGRESS BARS ===== -->
+            <div class="sticky-left">
+                <div class="progress-grid">
+                    <div class="progress-item">
+                        <div class="progress-label">Daily</div>
+                        <div class="progress-count" id="dailyCount">0 / 0</div>
+                        <div class="progress-bar"><div class="progress-fill" id="dailyFill" style="width:0%"></div></div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">Weekly</div>
+                        <div class="progress-count" id="weeklyCount">0 / 0</div>
+                        <div class="progress-bar"><div class="progress-fill" id="weeklyFill" style="width:0%"></div></div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">Monthly</div>
+                        <div class="progress-count" id="monthlyCount">0 / 0</div>
+                        <div class="progress-bar"><div class="progress-fill" id="monthlyFill" style="width:0%"></div></div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">Custom</div>
+                        <div class="progress-count" id="customCount">0 / 0</div>
+                        <div class="progress-bar"><div class="progress-fill" id="customFill" style="width:0%"></div></div>
+                    </div>
                 </div>
-                <div class="section" id="monthlySection">
-                    <h2>📆 Monthly <span class="badge" id="monthlyBadge">Resets: 1st 08:00 UTC</span></h2>
-                    <ul id="monthlyList"></ul>
+            </div>
+
+            <!-- ===== MIDDLE: CONTENT ===== -->
+            <div class="middle-content">
+
+                <!-- CHECKLIST GRID -->
+                <div class="checklist-grid">
+                    <!-- LEFT: DAILY -->
+                    <div class="section" id="dailySection">
+                        <h2>
+                            📅 Daily
+                            <div class="section-actions">
+                                <span class="badge">08:00 UTC</span>
+                                <button class="quick-add-toggle" data-target="daily">➕</button>
+                            </div>
+                        </h2>
+                        <div class="quick-add-row" id="quickAdd-daily">
+                            <input type="text" placeholder="Task name..." class="quick-add-input" />
+                            <button class="btn btn-sm btn-primary quick-add-confirm" data-target="daily">Add</button>
+                            <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                        </div>
+                        <ul id="dailyList"></ul>
+                    </div>
+
+                    <!-- RIGHT: WEEKLY + MONTHLY stacked -->
+                    <div style="display:flex;flex-direction:column;gap:16px;">
+                        <div class="section" id="weeklySection">
+                            <h2>
+                                📆 Weekly
+                                <div class="section-actions">
+                                    <span class="badge">Tuesday 08:00 UTC</span>
+                                    <button class="quick-add-toggle" data-target="weekly">➕</button>
+                                </div>
+                            </h2>
+                            <div class="quick-add-row" id="quickAdd-weekly">
+                                <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                <button class="btn btn-sm btn-primary quick-add-confirm" data-target="weekly">Add</button>
+                                <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                            </div>
+                            <ul id="weeklyList"></ul>
+                        </div>
+                        <div class="section" id="monthlySection">
+                            <h2>
+                                📆 Monthly
+                                <div class="section-actions">
+                                    <span class="badge">1st of month 08:00 UTC</span>
+                                    <button class="quick-add-toggle" data-target="monthly">➕</button>
+                                </div>
+                            </h2>
+                            <div class="quick-add-row" id="quickAdd-monthly">
+                                <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                <button class="btn btn-sm btn-primary quick-add-confirm" data-target="monthly">Add</button>
+                                <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                            </div>
+                            <ul id="monthlyList"></ul>
+                        </div>
+                    </div>
+
+                    <!-- BOTTOM: CUSTOM -->
+                    <div class="section custom-section" id="customSection">
+                        <h2>
+                            ✨ Custom
+                            <div class="section-actions">
+                                <span class="badge">Your tasks</span>
+                                <button class="quick-add-toggle" data-target="custom">➕</button>
+                            </div>
+                        </h2>
+                        <div class="quick-add-row" id="quickAdd-custom">
+                            <input type="text" placeholder="Task name..." class="quick-add-input" />
+                            <input type="text" placeholder="Countdown (e.g. 6:21)" class="quick-add-countdown" />
+                            <button class="btn btn-sm btn-primary quick-add-confirm" data-target="custom">Add</button>
+                            <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                        </div>
+                        <ul id="customList"></ul>
+                    </div>
+                </div>
+
+                <!-- ADD CUSTOM TASK (Main) -->
+                <div class="add-task-row">
+                    <div class="field-group" style="flex:2;">
+                        <label>Task Name</label>
+                        <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, 5x Training, Amitoi" />
+                    </div>
+                    <div class="field-group">
+                        <label>Reset at (Date &amp; Time)</label>
+                        <input type="datetime-local" id="customTaskDateTime" />
+                    </div>
+                    <div class="field-group field-group-small">
+                        <label>Countdown (HH:MM)</label>
+                        <input type="text" id="customTaskCountdown" placeholder="--:--" />
+                    </div>
+                    <div class="field-group" style="flex:0.5; min-width:60px;">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary" id="addTaskBtn" style="width:100%;">➕ Add</button>
+                    </div>
+                </div>
+                <div id="errorMsg" class="error-msg"></div>
+                <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px; padding-left:4px; transition:color 0.3s;">
+                    💡 Set a <strong>date &amp; time</strong> for a one-time reset, OR set a <strong>countdown</strong> (e.g., 6:21 for 6 hours 21 minutes) for a recurring timer. Timer starts when you <strong>check the task as done</strong>.
+                </div>
+
+                <!-- RESET AREA -->
+                <div class="reset-area">
+                    <button class="btn btn-danger" id="resetAllBtn">🔄 Reset All</button>
+                    <button class="btn btn-warning" id="resetCustomBtn">🗑️ Delete All Custom</button>
+                    <span class="last-reset" id="lastResetDisplay">Last reset: --</span>
+                </div>
+
+                <div class="tz-display">🕐 All times in your local time zone · Hard reset at 08:00 UTC</div>
+                <div class="footer-text">💾 Auto-saves to your browser · Data stays on this device</div>
+            </div>
+
+            <!-- ===== RIGHT: STICKY COUNTDOWN TIMERS ===== -->
+            <div class="sticky-right">
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <div class="label-row">
+                            <span class="emoji">⏳</span>
+                            <span class="label">Daily</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="time" id="dailyTimer">--</span>
+                        </div>
+                        <div class="tz-row">
+                            <span class="tz-label">08:00 UTC (10:00 local)</span>
+                        </div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="label-row">
+                            <span class="emoji">⏳</span>
+                            <span class="label">Weekly</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="time" id="weeklyTimer">--</span>
+                        </div>
+                        <div class="tz-row">
+                            <span class="tz-label">Tuesday 08:00 UTC (10:00 local)</span>
+                        </div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="label-row">
+                            <span class="emoji">⏳</span>
+                            <span class="label">Monthly</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="time" id="monthlyTimer">--</span>
+                        </div>
+                        <div class="tz-row">
+                            <span class="tz-label">1st of month 08:00 UTC (10:00 local)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- BOTTOM: CUSTOM -->
-            <div class="section custom-section" id="customSection">
-                <h2>✨ Custom <span class="badge">Your tasks with custom timers</span></h2>
-                <ul id="customList"></ul>
-            </div>
         </div>
+        <!-- ===== END THREE-COLUMN LAYOUT ===== -->
 
-        <!-- ===== ADD CUSTOM TASK ===== -->
-        <div class="add-task-row">
-            <div class="field-group" style="flex:2;">
-                <label>Task Name</label>
-                <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, 5x Training, Amitoi" />
-            </div>
-            <div class="field-group">
-                <label>Reset at (Date &amp; Time)</label>
-                <input type="datetime-local" id="customTaskDateTime" />
-            </div>
-            <div class="field-group field-group-small">
-                <label>Countdown (Hours:Minutes)</label>
-                <input type="text" id="customTaskCountdown" placeholder="6:21" />
-            </div>
-            <div class="field-group" style="flex:0.5; min-width:60px;">
-                <label>&nbsp;</label>
-                <button class="btn btn-primary" id="addTaskBtn" style="width:100%;">➕ Add</button>
-            </div>
-        </div>
-        <div id="errorMsg" class="error-msg"></div>
-        <div style="font-size:0.65rem; color:#555; margin-top:4px; padding-left:4px;">
-            💡 Set a <strong>date &amp; time</strong> for a one-time reset, OR set a <strong>countdown</strong> (e.g., 6:21 for 6 hours 21 minutes) for a recurring timer. Timer starts when you <strong>check the task as done</strong>.
-        </div>
-
-        <!-- ===== RESET AREA ===== -->
-        <div class="reset-area">
-            <button class="btn btn-danger" id="resetAllBtn">🔄 Reset All</button>
-            <button class="btn btn-warning" id="resetCustomBtn">🗑️ Delete All Custom</button>
-            <span class="last-reset" id="lastResetDisplay">Last reset: --</span>
-        </div>
-
-        <div class="tz-display" id="tzDisplay">All times in UTC · Reset at 08:00 UTC</div>
-        <div class="footer-text">💾 Auto-saves to your browser · Data stays on this device</div>
     </div>
+    <!-- ===== END APP ===== -->
 
     <script>
+        // ============================================================
+        //  THEME SYSTEM
+        // ============================================================
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('tl_theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === theme);
+            });
+        }
+
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setTheme(this.dataset.theme);
+            });
+        });
+
+        const savedTheme = localStorage.getItem('tl_theme') || 'dark';
+        setTheme(savedTheme);
+
         // ============================================================
         //  CONFIG - Reset at 08:00 UTC
         // ============================================================
@@ -532,10 +1019,6 @@
             const reset = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 8, 0, 0, 0));
             if (now >= reset) reset.setUTCMonth(reset.getUTCMonth() + 1);
             return reset;
-        }
-
-        function getUTCString() {
-            return 'UTC';
         }
 
         function formatCountdown(ms) {
@@ -590,14 +1073,14 @@
         // ============================================================
         function loadData() {
             try {
-                const raw = localStorage.getItem('tl_data_v6');
+                const raw = localStorage.getItem('tl_data_v10');
                 if (raw) return JSON.parse(raw);
             } catch (_) { /* ignore */ }
             return null;
         }
 
         function saveData(data) {
-            localStorage.setItem('tl_data_v6', JSON.stringify(data));
+            localStorage.setItem('tl_data_v10', JSON.stringify(data));
         }
 
         function getTaskKey(taskId, group) {
@@ -713,8 +1196,6 @@
             updateProgress();
             updateCountdowns();
             updateLastReset();
-            updateTimezoneDisplay();
-            updateBadges();
             startLiveTimers();
         }
 
@@ -727,6 +1208,16 @@
                 const isChecked = getTaskState(task.id, group);
                 if (isChecked) li.classList.add('done');
 
+                li.addEventListener('click', function(e) {
+                    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.counter-group'))
+                        return;
+                    const cb = this.querySelector('input[type="checkbox"]');
+                    if (cb) {
+                        cb.checked = !cb.checked;
+                        cb.dispatchEvent(new Event('change'));
+                    }
+                });
+
                 const left = document.createElement('div');
                 left.className = 'task-left';
 
@@ -734,7 +1225,8 @@
                 cb.type = 'checkbox';
                 cb.checked = isChecked;
                 cb.dataset.taskId = task.id;
-                cb.addEventListener('change', function() {
+                cb.addEventListener('change', function(e) {
+                    e.stopPropagation();
                     if (group === 'custom' && task.customTimer && task.customTimer.type === 'countdown') {
                         if (this.checked) {
                             setTimerStart(task.id, Date.now());
@@ -863,7 +1355,7 @@
                                 displayText = '⏱️ <span class="countdown-live">' + formatCountdownShort(remaining) +
                                     '</span>';
                             } else {
-                                displayText = '✅ <span class="countdown-done">Done! Click to reset</span>';
+                                displayText = '✅ <span class="countdown-done">Ready to reset!</span>';
                             }
                         } else if (isChecked) {
                             displayText = '⏱️ <span class="countdown-live">Waiting...</span>';
@@ -878,40 +1370,46 @@
 
                     timerDisplay.innerHTML = displayText;
                     right.appendChild(timerDisplay);
+                }
 
-                    const del = document.createElement('button');
-                    del.className = 'delete-btn';
-                    del.textContent = '✕';
-                    del.addEventListener('click', function() {
-                        if (confirm('Delete "' + task.name + '"?')) {
-                            state.tasks.custom = state.tasks.custom.filter(t => t.id !== task.id);
-                            localStorage.removeItem(getTaskKey(task.id, 'custom'));
-                            localStorage.removeItem(getCounterKey(task.id));
+                const actions = document.createElement('div');
+                actions.className = 'task-actions';
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = '✎';
+                editBtn.title = 'Edit task';
+                editBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const newName = prompt('Edit task name:', task.name);
+                    if (newName !== null && newName.trim() !== '') {
+                        task.name = newName.trim();
+                        saveData(state);
+                        render();
+                    }
+                });
+                actions.appendChild(editBtn);
+
+                const delBtn = document.createElement('button');
+                delBtn.textContent = '✕';
+                delBtn.className = 'delete-task-btn';
+                delBtn.title = 'Remove task';
+                delBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (confirm('Remove "' + task.name + '" from this list?')) {
+                        state.tasks[group] = state.tasks[group].filter(t => t.id !== task.id);
+                        localStorage.removeItem(getTaskKey(task.id, group));
+                        localStorage.removeItem(getCounterKey(task.id));
+                        if (group === 'custom') {
                             clearTimerStart(task.id);
                             localStorage.removeItem(getTimerDurationKey(task.id));
-                            saveData(state);
-                            render();
                         }
-                    });
-                    right.appendChild(del);
-                }
+                        saveData(state);
+                        render();
+                    }
+                });
+                actions.appendChild(delBtn);
 
-                if (group === 'custom' && !task.customTimer) {
-                    const del = document.createElement('button');
-                    del.className = 'delete-btn';
-                    del.textContent = '✕';
-                    del.addEventListener('click', function() {
-                        if (confirm('Delete "' + task.name + '"?')) {
-                            state.tasks.custom = state.tasks.custom.filter(t => t.id !== task.id);
-                            localStorage.removeItem(getTaskKey(task.id, 'custom'));
-                            localStorage.removeItem(getCounterKey(task.id));
-                            saveData(state);
-                            render();
-                        }
-                    });
-                    right.appendChild(del);
-                }
-
+                right.appendChild(actions);
                 li.appendChild(right);
                 list.appendChild(li);
             });
@@ -951,17 +1449,8 @@
             document.getElementById('monthlyTimer').textContent = formatCountdown(getMonthlyReset() - now);
         }
 
-        function updateBadges() {
-            document.getElementById('dailyBadge').textContent = 'Resets: 08:00 UTC';
-            document.getElementById('weeklyBadge').textContent = 'Resets: Tuesday 08:00 UTC';
-            document.getElementById('monthlyBadge').textContent = 'Resets: 1st 08:00 UTC';
-            document.getElementById('dailyTz').textContent = '08:00 UTC';
-            document.getElementById('weeklyTz').textContent = 'Tue 08:00 UTC';
-            document.getElementById('monthlyTz').textContent = '1st 08:00 UTC';
-        }
-
         function updateLastReset() {
-            const last = localStorage.getItem('tl_last_reset_time_v6');
+            const last = localStorage.getItem('tl_last_reset_time_v10');
             if (last) {
                 try {
                     const d = new Date(parseInt(last));
@@ -972,10 +1461,6 @@
             } else {
                 document.getElementById('lastResetDisplay').textContent = 'Last reset: --';
             }
-        }
-
-        function updateTimezoneDisplay() {
-            document.getElementById('tzDisplay').textContent = '🕐 All times in UTC · Reset at 08:00 UTC';
         }
 
         // ============================================================
@@ -1023,15 +1508,14 @@
         }
 
         // ============================================================
-        //  RESET LOGIC - FIXED VERSION
+        //  RESET LOGIC
         // ============================================================
         function checkResets() {
             const now = new Date();
             let changed = false;
 
-            // Daily reset
             const dailyReset = getDailyReset();
-            const dailyKey = 'tl_reset_daily_v6_' + dailyReset.toISOString().split('T')[0];
+            const dailyKey = 'tl_reset_daily_v10_' + dailyReset.toISOString().split('T')[0];
             if (now >= dailyReset && !localStorage.getItem(dailyKey)) {
                 state.tasks.daily.forEach(t => {
                     setTaskState(t.id, 'daily', false);
@@ -1039,12 +1523,11 @@
                 });
                 localStorage.setItem(dailyKey, 'true');
                 changed = true;
-                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
             }
 
-            // Weekly reset
             const weeklyReset = getWeeklyReset();
-            const weeklyKey = 'tl_reset_weekly_v6_' + weeklyReset.toISOString().split('T')[0];
+            const weeklyKey = 'tl_reset_weekly_v10_' + weeklyReset.toISOString().split('T')[0];
             if (now >= weeklyReset && !localStorage.getItem(weeklyKey)) {
                 state.tasks.weekly.forEach(t => {
                     setTaskState(t.id, 'weekly', false);
@@ -1052,12 +1535,11 @@
                 });
                 localStorage.setItem(weeklyKey, 'true');
                 changed = true;
-                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
             }
 
-            // Monthly reset
             const monthlyReset = getMonthlyReset();
-            const monthlyKey = 'tl_reset_monthly_v6_' + monthlyReset.toISOString().split('T')[0];
+            const monthlyKey = 'tl_reset_monthly_v10_' + monthlyReset.toISOString().split('T')[0];
             if (now >= monthlyReset && !localStorage.getItem(monthlyKey)) {
                 state.tasks.monthly.forEach(t => {
                     setTaskState(t.id, 'monthly', false);
@@ -1065,10 +1547,9 @@
                 });
                 localStorage.setItem(monthlyKey, 'true');
                 changed = true;
-                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
             }
 
-            // Custom task resets
             state.tasks.custom.forEach(t => {
                 if (t.customTimer) {
                     if (t.customTimer.type === 'datetime') {
@@ -1079,7 +1560,7 @@
                             if (t.hasCounter) setCounterValue(t.id, 0);
                             localStorage.setItem(key, 'true');
                             changed = true;
-                            localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                            localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
                         }
                     } else if (t.customTimer.type === 'countdown') {
                         const durationMs = t.customTimer.durationMs;
@@ -1100,7 +1581,7 @@
                                     }
                                 });
                                 changed = true;
-                                localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+                                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
                             }
                         }
                     }
@@ -1154,7 +1635,7 @@
         }
 
         // ============================================================
-        //  ADD CUSTOM TASK
+        //  ADD CUSTOM TASK (Main)
         // ============================================================
         function addCustomTask() {
             const input = document.getElementById('customTaskInput');
@@ -1218,6 +1699,94 @@
         }
 
         // ============================================================
+        //  QUICK ADD
+        // ============================================================
+        function setupQuickAdd() {
+            document.querySelectorAll('.quick-add-toggle').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const target = this.dataset.target;
+                    const row = document.getElementById('quickAdd-' + target);
+                    row.classList.toggle('show');
+                    if (row.classList.contains('show')) {
+                        row.querySelector('.quick-add-input').focus();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.quick-add-cancel').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.closest('.quick-add-row').classList.remove('show');
+                });
+            });
+
+            document.querySelectorAll('.quick-add-confirm').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const target = this.dataset.target;
+                    const row = document.getElementById('quickAdd-' + target);
+                    const input = row.querySelector('.quick-add-input');
+                    const countdown = row.querySelector('.quick-add-countdown');
+                    const name = input.value.trim();
+                    if (!name) return;
+
+                    let customTimer = null;
+                    if (countdown) {
+                        const cdVal = countdown.value.trim();
+                        if (cdVal) {
+                            const durationMs = parseCountdownInput(cdVal);
+                            if (durationMs && durationMs > 0) {
+                                customTimer = {
+                                    type: 'countdown',
+                                    durationMs: durationMs,
+                                    display: cdVal
+                                };
+                            }
+                        }
+                    }
+
+                    let hasCounter = false;
+                    let maxCount = 0;
+                    const match = name.match(/(\d+)\s*[xX×*]\s*/);
+                    if (match) {
+                        hasCounter = true;
+                        maxCount = parseInt(match[1]) || 0;
+                    }
+
+                    const task = {
+                        id: generateId(),
+                        name: name,
+                        hasCounter: hasCounter,
+                        maxCount: maxCount || 0,
+                        customTimer: customTimer
+                    };
+
+                    if (target === 'custom') {
+                        state.tasks.custom.push(task);
+                    } else {
+                        state.tasks[target].push(task);
+                    }
+                    saveState();
+                    render();
+                    input.value = '';
+                    if (countdown) countdown.value = '';
+                    row.classList.remove('show');
+                });
+            });
+
+            document.querySelectorAll('.quick-add-input').forEach(inp => {
+                inp.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        const row = this.closest('.quick-add-row');
+                        const btn = row.querySelector('.quick-add-confirm');
+                        if (btn) btn.click();
+                    }
+                });
+            });
+        }
+
+        // ============================================================
         //  RESET / DELETE
         // ============================================================
         function resetAll() {
@@ -1230,10 +1799,10 @@
                 });
             });
             const now = new Date();
-            localStorage.setItem('tl_reset_daily_v6_' + getDailyReset().toISOString().split('T')[0], 'true');
-            localStorage.setItem('tl_reset_weekly_v6_' + getWeeklyReset().toISOString().split('T')[0], 'true');
-            localStorage.setItem('tl_reset_monthly_v6_' + getMonthlyReset().toISOString().split('T')[0], 'true');
-            localStorage.setItem('tl_last_reset_time_v6', now.getTime().toString());
+            localStorage.setItem('tl_reset_daily_v10_' + getDailyReset().toISOString().split('T')[0], 'true');
+            localStorage.setItem('tl_reset_weekly_v10_' + getWeeklyReset().toISOString().split('T')[0], 'true');
+            localStorage.setItem('tl_reset_monthly_v10_' + getMonthlyReset().toISOString().split('T')[0], 'true');
+            localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
             render();
         }
 
@@ -1270,6 +1839,8 @@
 
             document.getElementById('resetAllBtn').addEventListener('click', resetAll);
             document.getElementById('resetCustomBtn').addEventListener('click', deleteAllCustom);
+
+            setupQuickAdd();
         });
     </script>
 </body>
