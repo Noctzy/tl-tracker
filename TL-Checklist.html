@@ -7,7 +7,6 @@
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
-            /* Default Dark Theme - Blackish */
             --bg-body: #0a0a0f;
             --bg-app: #111118;
             --bg-card: #1a1a24;
@@ -29,9 +28,10 @@
             --scrollbar-track: #1a1a24;
             --scrollbar-thumb: #2a2a3a;
             --sticky-width: 200px;
+            --nav-bg: #1a1a24;
+            --nav-hover: #2a2a3a;
         }
 
-        /* ===== LIGHT THEME ===== */
         [data-theme="light"] {
             --bg-body: #f0f0f0;
             --bg-app: #ffffff;
@@ -50,9 +50,10 @@
             --shadow-color: rgba(0, 0, 0, 0.15);
             --scrollbar-track: #e8e8e8;
             --scrollbar-thumb: #ccc;
+            --nav-bg: #e8e8e8;
+            --nav-hover: #d0d0d0;
         }
 
-        /* ===== T&L THEME (Purple/Gold #342A42) ===== */
         [data-theme="tl"] {
             --bg-body: #342A42;
             --bg-app: #3D304A;
@@ -74,6 +75,8 @@
             --shadow-color: rgba(0, 0, 0, 0.7);
             --scrollbar-track: #3D304A;
             --scrollbar-thumb: #5A4D6A;
+            --nav-bg: #3D304A;
+            --nav-hover: #5A4D6A;
         }
 
         /* ===== GENERAL STYLES ===== */
@@ -122,42 +125,80 @@
         /* ===== HEADER ===== */
         .header-row {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
             margin-bottom: 4px;
-            position: relative;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 0 0 auto;
         }
         h1 {
             color: var(--accent-gold);
             font-size: 1.8rem;
             transition: color 0.3s;
             text-align: center;
-            flex: 1;
+            margin: 0 auto;
         }
-        .theme-controls {
+        .profile-selector {
             display: flex;
-            gap: 8px;
             align-items: center;
-            flex-wrap: wrap;
-            position: absolute;
-            right: 0;
+            gap: 8px;
         }
-        .theme-controls label {
+        .profile-selector label {
             font-size: 0.7rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        .profile-selector select {
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+        }
+        .profile-selector select:focus {
+            outline: 2px solid var(--accent-gold);
+        }
+        .profile-selector .btn-sm {
+            padding: 4px 10px;
+            font-size: 0.7rem;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex: 0 0 auto;
+        }
+        .theme-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .theme-controls label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         .theme-btn {
-            padding: 4px 14px;
+            padding: 3px 12px;
             border: 2px solid var(--border-color);
             border-radius: 20px;
             background: transparent;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             transition: 0.2s;
         }
         .theme-btn:hover {
@@ -168,15 +209,82 @@
             border-color: var(--accent-gold);
             color: var(--accent-gold);
         }
+        .notification-bell {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            position: relative;
+        }
+        .notification-bell:hover {
+            color: var(--accent-gold);
+        }
+        .notification-bell .badge-dot {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            display: none;
+            border: 2px solid var(--bg-app);
+        }
+        .notification-bell .badge-dot.show {
+            display: block;
+        }
         .subtitle {
             text-align: center;
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 16px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
             transition: color 0.3s;
         }
 
-        /* ===== THREE-COLUMN LAYOUT ===== */
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            background: var(--nav-bg);
+            padding: 4px 8px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            transition: background 0.3s;
+            border: 1px solid var(--border-color);
+        }
+        .nav-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .nav-btn:hover {
+            background: var(--nav-hover);
+            color: var(--text-primary);
+        }
+        .nav-btn.active {
+            background: var(--accent-gold);
+            color: #1a1a2e;
+        }
+        .nav-btn.active:hover {
+            filter: brightness(1.1);
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* ===== THREE-COLUMN LAYOUT (Home) ===== */
         .main-layout {
             display: flex;
             gap: 16px;
@@ -224,9 +332,24 @@
                 flex-direction: column;
                 align-items: center;
             }
-            .theme-controls {
-                position: static;
+            .header-left {
+                flex-wrap: wrap;
                 justify-content: center;
+                gap: 12px;
+            }
+            .header-right {
+                justify-content: center;
+            }
+            .profile-selector {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-bar {
+                justify-content: center;
+            }
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
             }
             .sticky-left .progress-grid {
                 grid-template-columns: 1fr 1fr;
@@ -415,9 +538,9 @@
             transition: color 0.3s, border-color 0.3s;
         }
         .section h2 .badge {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             background: var(--bg-input);
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 20px;
             color: var(--text-secondary);
             font-weight: 400;
@@ -428,13 +551,14 @@
             display: flex;
             gap: 6px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .section h2 .section-actions button {
             background: none;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             padding: 2px 8px;
             border-radius: 4px;
             transition: 0.2s;
@@ -442,6 +566,9 @@
         .section h2 .section-actions button:hover {
             background: var(--bg-hover);
             color: var(--accent-gold);
+        }
+        .section h2 .section-actions .reset-default-btn:hover {
+            color: var(--accent-orange);
         }
         .section ul {
             list-style: none;
@@ -484,6 +611,48 @@
             transition: 0.2s, color 0.3s;
             font-size: 0.95rem;
         }
+        .shop-hint-trigger {
+            display: inline-block;
+            position: relative;
+            cursor: help;
+            margin-left: 6px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+        .shop-hint-trigger .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            width: 200px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-align: center;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.2s, visibility 0.2s;
+            font-size: 0.75rem;
+            font-weight: 400;
+            white-space: normal;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+        .shop-hint-trigger .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--border-color);
+        }
+        .shop-hint-trigger:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
         .section li.done .task-text {
             text-decoration: line-through;
             color: var(--text-secondary);
@@ -514,7 +683,6 @@
             color: var(--accent-red);
         }
 
-        /* ===== COUNTER ===== */
         .counter-group {
             display: flex;
             align-items: center;
@@ -557,7 +725,6 @@
             color: var(--accent-gold);
         }
 
-        /* ===== CUSTOM TIMER DISPLAY ===== */
         .custom-timer-display {
             font-size: 0.7rem;
             color: var(--text-secondary);
@@ -588,7 +755,6 @@
             grid-column: 1 / -1;
         }
 
-        /* ===== ADD TASK ROW ===== */
         .add-task-row {
             display: flex;
             gap: 10px;
@@ -640,7 +806,6 @@
             min-width: 60px;
         }
 
-        /* ===== BUTTONS ===== */
         .btn {
             padding: 7px 20px;
             border: none;
@@ -682,7 +847,6 @@
             margin-top: 14px;
         }
 
-        /* ===== MISC ===== */
         .footer-text {
             margin-top: 16px;
             font-size: 0.8rem;
@@ -726,7 +890,6 @@
             flex-wrap: wrap;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             #app {
                 padding: 12px;
@@ -739,7 +902,6 @@
             }
         }
 
-        /* ===== SECTION QUICK ADD ===== */
         .quick-add-row {
             display: none;
             gap: 8px;
@@ -771,208 +933,654 @@
             padding: 4px 14px;
             font-size: 0.75rem;
         }
+
+        /* GUIDES - ACCORDION */
+        .guide-accordion {
+            background: var(--bg-card);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .guide-accordion-header {
+            padding: 12px 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .guide-accordion-header:hover {
+            background: var(--bg-hover);
+        }
+        .guide-accordion-header h3 {
+            color: var(--accent-gold);
+            font-size: 1rem;
+            margin: 0;
+        }
+        .guide-accordion-header .arrow {
+            color: var(--text-muted);
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+        }
+        .guide-accordion-header .arrow.open {
+            transform: rotate(180deg);
+        }
+        .guide-accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 18px;
+        }
+        .guide-accordion-body.open {
+            max-height: 800px;
+            padding: 0 18px 16px 18px;
+        }
+        .guide-accordion-body p,
+        .guide-accordion-body ul {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin: 6px 0;
+        }
+        .guide-accordion-body ul {
+            padding-left: 20px;
+        }
+        .guide-accordion-body ul li {
+            margin-bottom: 2px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+        }
+        .notes-textarea:focus {
+            outline: 2px solid var(--accent-gold);
+        }
+
+        .calc-card {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            transition: background 0.3s;
+        }
+        .calc-card h3 {
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .calc-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .calc-row label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            min-width: 120px;
+        }
+        .calc-row input,
+        .calc-row select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            flex: 1;
+            min-width: 80px;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+        }
+        .calc-row input:focus,
+        .calc-row select:focus {
+            outline: 2px solid var(--accent-gold);
+        }
+        .calc-result {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            padding: 8px 12px;
+            background: var(--bg-input);
+            border-radius: 6px;
+            margin-top: 8px;
+            transition: color 0.3s, background 0.3s;
+        }
+        .calc-result .label {
+            font-weight: 400;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .settings-card {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            transition: background 0.3s;
+        }
+        .settings-card h3 {
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .settings-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 6px;
+            padding: 4px 0;
+        }
+        .settings-row label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            min-width: 180px;
+        }
+        .settings-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-gold);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin: 0 4px;
+        }
+        .settings-row .desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            flex: 1;
+            min-width: 150px;
+        }
+        .settings-row .btn {
+            flex: 0;
+        }
+        .settings-row .btn-danger {
+            flex: 0;
+            white-space: nowrap;
+        }
+        .settings-row .btn-primary {
+            flex: 0;
+            white-space: nowrap;
+        }
+        .import-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .import-row input[type="file"] {
+            flex: 0 1 auto;
+            width: auto;
+            min-width: 180px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+        }
+        .import-row input[type="file"]::-webkit-file-upload-button {
+            padding: 4px 16px;
+            border: none;
+            border-radius: 4px;
+            background: var(--accent-gold);
+            color: #1a1a2e;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .import-row input[type="file"]::-webkit-file-upload-button:hover {
+            filter: brightness(1.1);
+        }
+        .import-row .btn {
+            flex: 0;
+            white-space: nowrap;
+        }
+        .coming-soon-box {
+            background: var(--bg-card);
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px dashed var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
+            margin-bottom: 14px;
+        }
+        .coming-soon-box h3 {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+        .coming-soon-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .guide-category {
+            color: var(--accent-teal);
+            font-size: 1.1rem;
+            margin: 16px 0 10px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .guide-category:first-of-type {
+            margin-top: 0;
+        }
+        /* Data Management cleaner layout */
+        .data-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 6px 0;
+            flex-wrap: wrap;
+        }
+        .data-row label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            min-width: 110px;
+        }
+        .data-row .btn {
+            flex: 0;
+            white-space: nowrap;
+        }
+        .data-row .hint {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .data-row input[type="file"] {
+            flex: 0 1 auto;
+            min-width: 180px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+        }
+        .data-row input[type="file"]::-webkit-file-upload-button {
+            padding: 4px 16px;
+            border: none;
+            border-radius: 4px;
+            background: var(--accent-gold);
+            color: #1a1a2e;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .data-row input[type="file"]::-webkit-file-upload-button:hover {
+            filter: brightness(1.1);
+        }
+        .settings-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .settings-actions .btn {
+            flex: 0;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- ===== HEADER ===== -->
         <div class="header-row">
+            <div class="header-left">
+                <div class="profile-selector">
+                    <label>Profile:</label>
+                    <select id="profileSelect"></select>
+                    <button class="btn btn-sm btn-primary" id="addProfileBtn">+</button>
+                    <button class="btn btn-sm btn-danger" id="deleteProfileBtn">✕</button>
+                </div>
+            </div>
             <h1>⚔️ T&amp;L Tracker</h1>
-            <div class="theme-controls">
-                <label>Theme:</label>
-                <button class="theme-btn active" data-theme="dark">🌙 Dark</button>
-                <button class="theme-btn" data-theme="light">☀️ Light</button>
-                <button class="theme-btn" data-theme="tl">⚔️ T&amp;L</button>
+            <div class="header-right">
+                <span class="notification-bell" id="notificationBell" title="Notifications">
+                    🔔
+                    <span class="badge-dot" id="notificationDot"></span>
+                </span>
+                <div class="theme-controls">
+                    <label>Theme:</label>
+                    <button class="theme-btn active" data-theme="dark">🌙</button>
+                    <button class="theme-btn" data-theme="light">☀️</button>
+                    <button class="theme-btn" data-theme="tl">⚔️</button>
+                </div>
             </div>
         </div>
         <div class="subtitle">Daily · Weekly · Monthly — Auto-reset at 08:00 UTC</div>
 
-        <!-- ===== THREE-COLUMN LAYOUT ===== -->
-        <div class="main-layout">
-
-            <!-- ===== LEFT: STICKY PROGRESS BARS ===== -->
-            <div class="sticky-left">
-                <div class="progress-grid">
-                    <div class="progress-item">
-                        <div class="progress-label">Daily</div>
-                        <div class="progress-count" id="dailyCount">0 / 0</div>
-                        <div class="progress-bar"><div class="progress-fill" id="dailyFill" style="width:0%"></div></div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-label">Weekly</div>
-                        <div class="progress-count" id="weeklyCount">0 / 0</div>
-                        <div class="progress-bar"><div class="progress-fill" id="weeklyFill" style="width:0%"></div></div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-label">Monthly</div>
-                        <div class="progress-count" id="monthlyCount">0 / 0</div>
-                        <div class="progress-bar"><div class="progress-fill" id="monthlyFill" style="width:0%"></div></div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-label">Custom</div>
-                        <div class="progress-count" id="customCount">0 / 0</div>
-                        <div class="progress-bar"><div class="progress-fill" id="customFill" style="width:0%"></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== MIDDLE: CONTENT ===== -->
-            <div class="middle-content">
-
-                <!-- CHECKLIST GRID -->
-                <div class="checklist-grid">
-                    <!-- LEFT: DAILY -->
-                    <div class="section" id="dailySection">
-                        <h2>
-                            📅 Daily
-                            <div class="section-actions">
-                                <span class="badge">08:00 UTC</span>
-                                <button class="quick-add-toggle" data-target="daily">➕</button>
-                            </div>
-                        </h2>
-                        <div class="quick-add-row" id="quickAdd-daily">
-                            <input type="text" placeholder="Task name..." class="quick-add-input" />
-                            <button class="btn btn-sm btn-primary quick-add-confirm" data-target="daily">Add</button>
-                            <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
-                        </div>
-                        <ul id="dailyList"></ul>
-                    </div>
-
-                    <!-- RIGHT: WEEKLY + MONTHLY stacked -->
-                    <div style="display:flex;flex-direction:column;gap:16px;">
-                        <div class="section" id="weeklySection">
-                            <h2>
-                                📆 Weekly
-                                <div class="section-actions">
-                                    <span class="badge">Tuesday 08:00 UTC</span>
-                                    <button class="quick-add-toggle" data-target="weekly">➕</button>
-                                </div>
-                            </h2>
-                            <div class="quick-add-row" id="quickAdd-weekly">
-                                <input type="text" placeholder="Task name..." class="quick-add-input" />
-                                <button class="btn btn-sm btn-primary quick-add-confirm" data-target="weekly">Add</button>
-                                <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
-                            </div>
-                            <ul id="weeklyList"></ul>
-                        </div>
-                        <div class="section" id="monthlySection">
-                            <h2>
-                                📆 Monthly
-                                <div class="section-actions">
-                                    <span class="badge">1st of month 08:00 UTC</span>
-                                    <button class="quick-add-toggle" data-target="monthly">➕</button>
-                                </div>
-                            </h2>
-                            <div class="quick-add-row" id="quickAdd-monthly">
-                                <input type="text" placeholder="Task name..." class="quick-add-input" />
-                                <button class="btn btn-sm btn-primary quick-add-confirm" data-target="monthly">Add</button>
-                                <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
-                            </div>
-                            <ul id="monthlyList"></ul>
-                        </div>
-                    </div>
-
-                    <!-- BOTTOM: CUSTOM -->
-                    <div class="section custom-section" id="customSection">
-                        <h2>
-                            ✨ Custom
-                            <div class="section-actions">
-                                <span class="badge">Your tasks</span>
-                                <button class="quick-add-toggle" data-target="custom">➕</button>
-                            </div>
-                        </h2>
-                        <div class="quick-add-row" id="quickAdd-custom">
-                            <input type="text" placeholder="Task name..." class="quick-add-input" />
-                            <input type="text" placeholder="Countdown (e.g. 6:21)" class="quick-add-countdown" />
-                            <button class="btn btn-sm btn-primary quick-add-confirm" data-target="custom">Add</button>
-                            <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
-                        </div>
-                        <ul id="customList"></ul>
-                    </div>
-                </div>
-
-                <!-- ADD CUSTOM TASK (Main) -->
-                <div class="add-task-row">
-                    <div class="field-group" style="flex:2;">
-                        <label>Task Name</label>
-                        <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, 5x Training, Amitoi" />
-                    </div>
-                    <div class="field-group">
-                        <label>Reset at (Date &amp; Time)</label>
-                        <input type="datetime-local" id="customTaskDateTime" />
-                    </div>
-                    <div class="field-group field-group-small">
-                        <label>Countdown (HH:MM)</label>
-                        <input type="text" id="customTaskCountdown" placeholder="--:--" />
-                    </div>
-                    <div class="field-group" style="flex:0.5; min-width:60px;">
-                        <label>&nbsp;</label>
-                        <button class="btn btn-primary" id="addTaskBtn" style="width:100%;">➕ Add</button>
-                    </div>
-                </div>
-                <div id="errorMsg" class="error-msg"></div>
-                <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px; padding-left:4px; transition:color 0.3s;">
-                    💡 Set a <strong>date &amp; time</strong> for a one-time reset, OR set a <strong>countdown</strong> (e.g., 6:21 for 6 hours 21 minutes) for a recurring timer. Timer starts when you <strong>check the task as done</strong>.
-                </div>
-
-                <!-- RESET AREA -->
-                <div class="reset-area">
-                    <button class="btn btn-danger" id="resetAllBtn">🔄 Reset All</button>
-                    <button class="btn btn-warning" id="resetCustomBtn">🗑️ Delete All Custom</button>
-                    <span class="last-reset" id="lastResetDisplay">Last reset: --</span>
-                </div>
-
-                <div class="tz-display">🕐 All times in your local time zone · Hard reset at 08:00 UTC</div>
-                <div class="footer-text">💾 Auto-saves to your browser · Data stays on this device</div>
-            </div>
-
-            <!-- ===== RIGHT: STICKY COUNTDOWN TIMERS ===== -->
-            <div class="sticky-right">
-                <div class="countdown-grid">
-                    <div class="countdown-item">
-                        <div class="label-row">
-                            <span class="emoji">⏳</span>
-                            <span class="label">Daily</span>
-                        </div>
-                        <div class="time-row">
-                            <span class="time" id="dailyTimer">--</span>
-                        </div>
-                        <div class="tz-row">
-                            <span class="tz-label">08:00 UTC (10:00 local)</span>
-                        </div>
-                    </div>
-                    <div class="countdown-item">
-                        <div class="label-row">
-                            <span class="emoji">⏳</span>
-                            <span class="label">Weekly</span>
-                        </div>
-                        <div class="time-row">
-                            <span class="time" id="weeklyTimer">--</span>
-                        </div>
-                        <div class="tz-row">
-                            <span class="tz-label">Tuesday 08:00 UTC (10:00 local)</span>
-                        </div>
-                    </div>
-                    <div class="countdown-item">
-                        <div class="label-row">
-                            <span class="emoji">⏳</span>
-                            <span class="label">Monthly</span>
-                        </div>
-                        <div class="time-row">
-                            <span class="time" id="monthlyTimer">--</span>
-                        </div>
-                        <div class="tz-row">
-                            <span class="tz-label">1st of month 08:00 UTC (10:00 local)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <!-- ===== NAVIGATION ===== -->
+        <div class="nav-bar">
+            <button class="nav-btn active" data-page="home">🏠 Home</button>
+            <button class="nav-btn" data-page="guides">📖 Guides</button>
+            <button class="nav-btn" data-page="builds">⚔️ Builds</button>
+            <button class="nav-btn" data-page="calculators">🧮 Calculators</button>
+            <button class="nav-btn" data-page="notes">📝 Notes</button>
+            <button class="nav-btn" data-page="settings">⚙️ Settings</button>
         </div>
-        <!-- ===== END THREE-COLUMN LAYOUT ===== -->
+
+        <!-- ========================================================= -->
+        <!-- PAGE: HOME -->
+        <!-- ========================================================= -->
+        <div class="page active" id="page-home">
+            <div class="main-layout">
+
+                <!-- LEFT: STICKY PROGRESS BARS -->
+                <div class="sticky-left">
+                    <div class="progress-grid">
+                        <div class="progress-item">
+                            <div class="progress-label">Daily</div>
+                            <div class="progress-count" id="dailyCount">0 / 0</div>
+                            <div class="progress-bar"><div class="progress-fill" id="dailyFill" style="width:0%"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">Weekly</div>
+                            <div class="progress-count" id="weeklyCount">0 / 0</div>
+                            <div class="progress-bar"><div class="progress-fill" id="weeklyFill" style="width:0%"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">Monthly</div>
+                            <div class="progress-count" id="monthlyCount">0 / 0</div>
+                            <div class="progress-bar"><div class="progress-fill" id="monthlyFill" style="width:0%"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">Custom</div>
+                            <div class="progress-count" id="customCount">0 / 0</div>
+                            <div class="progress-bar"><div class="progress-fill" id="customFill" style="width:0%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MIDDLE: CONTENT -->
+                <div class="middle-content">
+
+                    <!-- CHECKLIST GRID -->
+                    <div class="checklist-grid">
+                        <!-- DAILY -->
+                        <div class="section" id="dailySection">
+                            <h2>
+                                📅 Daily
+                                <div class="section-actions">
+                                    <span class="badge">08:00 UTC</span>
+                                    <button class="reset-default-btn" onclick="resetCategoryToDefault('daily')" title="Reset to default tasks">↺</button>
+                                    <button class="quick-add-toggle" data-target="daily">➕</button>
+                                </div>
+                            </h2>
+                            <div class="quick-add-row" id="quickAdd-daily">
+                                <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                <button class="btn btn-sm btn-primary quick-add-confirm" data-target="daily">Add</button>
+                                <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                            </div>
+                            <ul id="dailyList"></ul>
+                        </div>
+
+                        <!-- WEEKLY + MONTHLY stacked -->
+                        <div style="display:flex;flex-direction:column;gap:16px;">
+                            <div class="section" id="weeklySection">
+                                <h2>
+                                    📆 Weekly
+                                    <div class="section-actions">
+                                        <span class="badge">Tuesday 08:00 UTC</span>
+                                        <button class="reset-default-btn" onclick="resetCategoryToDefault('weekly')" title="Reset to default tasks">↺</button>
+                                        <button class="quick-add-toggle" data-target="weekly">➕</button>
+                                    </div>
+                                </h2>
+                                <div class="quick-add-row" id="quickAdd-weekly">
+                                    <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                    <button class="btn btn-sm btn-primary quick-add-confirm" data-target="weekly">Add</button>
+                                    <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                                </div>
+                                <ul id="weeklyList"></ul>
+                            </div>
+                            <div class="section" id="monthlySection">
+                                <h2>
+                                    📆 Monthly
+                                    <div class="section-actions">
+                                        <span class="badge">1st of month 08:00 UTC</span>
+                                        <button class="reset-default-btn" onclick="resetCategoryToDefault('monthly')" title="Reset to default tasks">↺</button>
+                                        <button class="quick-add-toggle" data-target="monthly">➕</button>
+                                    </div>
+                                </h2>
+                                <div class="quick-add-row" id="quickAdd-monthly">
+                                    <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                    <button class="btn btn-sm btn-primary quick-add-confirm" data-target="monthly">Add</button>
+                                    <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                                </div>
+                                <ul id="monthlyList"></ul>
+                            </div>
+                        </div>
+
+                        <!-- CUSTOM -->
+                        <div class="section custom-section" id="customSection">
+                            <h2>
+                                ✨ Custom
+                                <div class="section-actions">
+                                    <span class="badge">Your tasks</span>
+                                    <button class="quick-add-toggle" data-target="custom">➕</button>
+                                </div>
+                            </h2>
+                            <div class="quick-add-row" id="quickAdd-custom">
+                                <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                <input type="text" placeholder="Countdown (e.g. 6:21)" class="quick-add-countdown" />
+                                <button class="btn btn-sm btn-primary quick-add-confirm" data-target="custom">Add</button>
+                                <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
+                            </div>
+                            <ul id="customList"></ul>
+                        </div>
+                    </div>
+
+                    <!-- ADD CUSTOM TASK (Main) -->
+                    <div class="add-task-row">
+                        <div class="field-group" style="flex:2;">
+                            <label>Task Name</label>
+                            <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, 5x Training, Amitoi" />
+                        </div>
+                        <div class="field-group">
+                            <label>Reset at (Date &amp; Time)</label>
+                            <input type="datetime-local" id="customTaskDateTime" />
+                        </div>
+                        <div class="field-group field-group-small">
+                            <label>Countdown (HH:MM)</label>
+                            <input type="text" id="customTaskCountdown" placeholder="--:--" />
+                        </div>
+                        <div class="field-group" style="flex:0.5; min-width:60px;">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" id="addTaskBtn" style="width:100%;">➕ Add</button>
+                        </div>
+                    </div>
+                    <div id="errorMsg" class="error-msg"></div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px; padding-left:4px; transition:color 0.3s;">
+                        💡 Set a <strong>date &amp; time</strong> for a one-time reset, OR set a <strong>countdown</strong> (e.g., 6:21 for 6 hours 21 minutes) for a recurring timer. Timer starts when you <strong>check the task as done</strong>.
+                    </div>
+
+                    <!-- RESET AREA -->
+                    <div class="reset-area">
+                        <button class="btn btn-danger" id="resetAllBtn">🔄 Reset All</button>
+                        <button class="btn btn-warning" id="resetCustomBtn">🗑️ Delete All Custom</button>
+                        <span class="last-reset" id="lastResetDisplay">Last reset: --</span>
+                    </div>
+
+                    <div class="tz-display">🕐 All times in your local time zone · Hard reset at 08:00 UTC</div>
+                    <div class="footer-text">💾 Auto-saves to your browser · Data stays on this device</div>
+                </div>
+
+                <!-- RIGHT: STICKY COUNTDOWN TIMERS -->
+                <div class="sticky-right">
+                    <div class="countdown-grid">
+                        <div class="countdown-item">
+                            <div class="label-row">
+                                <span class="emoji">⏳</span>
+                                <span class="label">Daily</span>
+                            </div>
+                            <div class="time-row">
+                                <span class="time" id="dailyTimer">--</span>
+                            </div>
+                            <div class="tz-row">
+                                <span class="tz-label">08:00 UTC (10:00 local)</span>
+                            </div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="label-row">
+                                <span class="emoji">⏳</span>
+                                <span class="label">Weekly</span>
+                            </div>
+                            <div class="time-row">
+                                <span class="time" id="weeklyTimer">--</span>
+                            </div>
+                            <div class="tz-row">
+                                <span class="tz-label">Tuesday 08:00 UTC (10:00 local)</span>
+                            </div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="label-row">
+                                <span class="emoji">⏳</span>
+                                <span class="label">Monthly</span>
+                            </div>
+                            <div class="time-row">
+                                <span class="time" id="monthlyTimer">--</span>
+                            </div>
+                            <div class="tz-row">
+                                <span class="tz-label">1st of month 08:00 UTC (10:00 local)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PAGE: GUIDES -->
+        <!-- ========================================================= -->
+        <div class="page" id="page-guides">
+            <h2 style="color:var(--accent-gold); margin-bottom:14px;">📖 Guides</h2>
+
+            <!-- Only one guide: How to Use This Tracker -->
+            <div class="guide-accordion">
+                <div class="guide-accordion-header" onclick="toggleGuide(this)">
+                    <h3>📋 How to Use This Tracker</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="guide-accordion-body">
+                    <p>Here's how to get the most out of your T&amp;L Tracker:</p>
+                    <ul>
+                        <li><strong>Profiles:</strong> Use the dropdown at the top left to switch between characters. Click <strong>+</strong> to add a new character (max 6).</li>
+                        <li><strong>Daily/Weekly/Monthly Tasks:</strong> Check off tasks as you complete them. Tasks with counters (like "3 Co-op Dungeons") let you track partial progress with <strong>+</strong> and <strong>−</strong> buttons.</li>
+                        <li><strong>Custom Tasks:</strong> Add your own tasks with optional countdown timers. The timer starts when you check the task as done.</li>
+                        <li><strong>Shop Hints:</strong> Hover over the 📍 icon next to a task to see where to buy that item.</li>
+                        <li><strong>Progress Bars:</strong> The left sidebar shows your overall progress for each category.</li>
+                        <li><strong>Countdown Timers:</strong> The right sidebar shows time remaining until each reset.</li>
+                        <li><strong>Reset Categories:</strong> Click the ↺ button in any section header to reset that category to its default tasks.</li>
+                        <li><strong>Themes:</strong> Switch between Dark, Light, and T&amp;L (purple/gold) themes using the buttons in the top-right.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="coming-soon-box">
+                <h3>📖 More Guides Coming Soon</h3>
+                <p>More guides will be added in future updates!</p>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PAGE: BUILDS -->
+        <!-- ========================================================= -->
+        <div class="page" id="page-builds">
+            <h2 style="color:var(--accent-gold); margin-bottom:14px;">⚔️ Builds</h2>
+            <div class="coming-soon-box">
+                <h3>⚔️ Build Saver Coming Soon</h3>
+                <p>Save and manage your character builds, weapon combos, and skill setups.</p>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PAGE: CALCULATORS -->
+        <!-- ========================================================= -->
+        <div class="page" id="page-calculators">
+            <h2 style="color:var(--accent-gold); margin-bottom:14px;">🧮 Calculators</h2>
+            <div class="coming-soon-box">
+                <h3>🧮 Calculators Coming Soon</h3>
+                <p>Gear Score, Lucent Farming, and more calculators will be added in future updates!</p>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PAGE: NOTES -->
+        <!-- ========================================================= -->
+        <div class="page" id="page-notes">
+            <h2 style="color:var(--accent-gold); margin-bottom:10px;">📝 My Notes</h2>
+            <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:12px;">Write your own notes, reminders, or strategies. Saves per profile.</p>
+            <textarea class="notes-textarea" id="notesTextarea" placeholder="Write your notes here..."></textarea>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm" id="saveNotesBtn">💾 Save Notes</button>
+                <span style="font-size:0.8rem; color:var(--text-muted); margin-left:10px;" id="notesStatus">Saved</span>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PAGE: SETTINGS -->
+        <!-- ========================================================= -->
+        <div class="page" id="page-settings">
+            <h2 style="color:var(--accent-gold); margin-bottom:14px;">⚙️ Settings</h2>
+
+            <div class="settings-card">
+                <h3>🔔 Notifications</h3>
+                <div class="settings-row">
+                    <label>Custom task done notification</label>
+                    <input type="checkbox" id="settingNotifyCustom" checked />
+                    <span class="desc">When a custom countdown timer expires</span>
+                </div>
+                <div class="settings-row">
+                    <label>Daily reset reminder</label>
+                    <input type="checkbox" id="settingNotifyDaily" />
+                    <span class="desc">1 hour before daily reset</span>
+                </div>
+                <div class="settings-row">
+                    <label>Weekly reset reminder</label>
+                    <input type="checkbox" id="settingNotifyWeekly" />
+                    <span class="desc">1 hour before weekly reset</span>
+                </div>
+                <div class="settings-row" style="margin-top:6px;">
+                    <label></label>
+                    <button class="btn btn-primary btn-sm" id="saveSettingsBtn">💾 Save Settings</button>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>📦 Data Management</h3>
+                <div class="data-row">
+                    <label>Export Data</label>
+                    <button class="btn btn-sm btn-primary" id="exportDataBtn">⬇️ Download Backup</button>
+                    <span class="hint">(saves all profiles and data)</span>
+                </div>
+                <div class="data-row">
+                    <label>Import Data</label>
+                    <input type="file" id="importDataInput" accept=".json" />
+                    <button class="btn btn-sm btn-primary" id="importDataBtn">⬆️ Restore Backup</button>
+                    <span class="hint">(overwrites current data)</span>
+                </div>
+                <div class="data-row">
+                    <label>Clear All Data</label>
+                    <button class="btn btn-sm btn-danger" id="clearDataBtn">🗑️ Clear All</button>
+                    <span class="hint">(deletes all profiles and data)</span>
+                </div>
+            </div>
+        </div>
 
     </div>
-    <!-- ===== END APP ===== -->
 
     <script>
         // ============================================================
@@ -994,6 +1602,267 @@
 
         const savedTheme = localStorage.getItem('tl_theme') || 'dark';
         setTheme(savedTheme);
+
+        // ============================================================
+        //  NAVIGATION
+        // ============================================================
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('page-' + this.dataset.page).classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  GUIDES - ACCORDION
+        // ============================================================
+        function toggleGuide(header) {
+            const body = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            body.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        // ============================================================
+        //  PROFILES
+        // ============================================================
+        const MAX_PROFILES = 6;
+
+        function getProfiles() {
+            try {
+                const raw = localStorage.getItem('tl_profiles');
+                return raw ? JSON.parse(raw) : ['Character 1'];
+            } catch (_) { return ['Character 1']; }
+        }
+
+        function saveProfiles(profiles) {
+            localStorage.setItem('tl_profiles', JSON.stringify(profiles));
+        }
+
+        function getCurrentProfile() {
+            return localStorage.getItem('tl_current_profile') || 'Character 1';
+        }
+
+        function setCurrentProfile(name) {
+            localStorage.setItem('tl_current_profile', name);
+        }
+
+        function getProfileData(profileName) {
+            const key = 'tl_data_' + profileName;
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : null;
+            } catch (_) { return null; }
+        }
+
+        function saveProfileData(profileName, data) {
+            const key = 'tl_data_' + profileName;
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function getProfileNotes(profileName) {
+            const key = 'tl_notes_' + profileName;
+            return localStorage.getItem(key) || '';
+        }
+
+        function saveProfileNotes(profileName, notes) {
+            const key = 'tl_notes_' + profileName;
+            localStorage.setItem(key, notes);
+        }
+
+        function renderProfiles() {
+            const select = document.getElementById('profileSelect');
+            const profiles = getProfiles();
+            const current = getCurrentProfile();
+            select.innerHTML = '';
+            profiles.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p;
+                opt.textContent = p;
+                if (p === current) opt.selected = true;
+                select.appendChild(opt);
+            });
+            if (!profiles.includes(current)) {
+                profiles.push(current);
+                saveProfiles(profiles);
+                renderProfiles();
+            }
+        }
+
+        document.getElementById('profileSelect').addEventListener('change', function() {
+            setCurrentProfile(this.value);
+            loadCurrentProfile();
+            renderAll();
+        });
+
+        document.getElementById('addProfileBtn').addEventListener('click', function() {
+            const profiles = getProfiles();
+            if (profiles.length >= MAX_PROFILES) {
+                alert('Maximum ' + MAX_PROFILES + ' profiles allowed.');
+                return;
+            }
+            const name = prompt('Enter character name:');
+            if (!name || name.trim() === '') return;
+            const trimmed = name.trim();
+            if (profiles.includes(trimmed)) {
+                alert('Profile "' + trimmed + '" already exists.');
+                return;
+            }
+            profiles.push(trimmed);
+            saveProfiles(profiles);
+            setCurrentProfile(trimmed);
+            renderProfiles();
+            const emptyData = {
+                tasks: { daily: [], weekly: [], monthly: [], custom: [] },
+                settings: { notifyCustom: true, notifyDaily: false, notifyWeekly: false }
+            };
+            saveProfileData(trimmed, emptyData);
+            loadCurrentProfile();
+            renderAll();
+        });
+
+        document.getElementById('deleteProfileBtn').addEventListener('click', function() {
+            const profiles = getProfiles();
+            const current = getCurrentProfile();
+            if (profiles.length <= 1) {
+                alert('Cannot delete the last profile.');
+                return;
+            }
+            if (!confirm('Delete profile "' + current + '" and all its data?')) return;
+            const index = profiles.indexOf(current);
+            profiles.splice(index, 1);
+            saveProfiles(profiles);
+            localStorage.removeItem('tl_data_' + current);
+            localStorage.removeItem('tl_notes_' + current);
+            const newCurrent = profiles[0];
+            setCurrentProfile(newCurrent);
+            renderProfiles();
+            loadCurrentProfile();
+            renderAll();
+        });
+
+        // ============================================================
+        //  LOAD CURRENT PROFILE DATA
+        // ============================================================
+        let state = {
+            tasks: {
+                daily: [],
+                weekly: [],
+                monthly: [],
+                custom: []
+            },
+            settings: {
+                notifyCustom: true,
+                notifyDaily: false,
+                notifyWeekly: false
+            }
+        };
+        let currentProfileName = '';
+
+        function loadCurrentProfile() {
+            currentProfileName = getCurrentProfile();
+            const data = getProfileData(currentProfileName);
+            if (data) {
+                state.tasks = data.tasks || { daily: [], weekly: [], monthly: [], custom: [] };
+                state.settings = data.settings || { notifyCustom: true, notifyDaily: false, notifyWeekly: false };
+                ['daily', 'weekly', 'monthly', 'custom'].forEach(g => {
+                    if (!state.tasks[g]) state.tasks[g] = [];
+                });
+            } else {
+                state.tasks = getDefaultTasks();
+                state.settings = { notifyCustom: true, notifyDaily: false, notifyWeekly: false };
+                saveCurrentProfile();
+            }
+            document.getElementById('notesTextarea').value = getProfileNotes(currentProfileName);
+            document.getElementById('settingNotifyCustom').checked = state.settings.notifyCustom !== false;
+            document.getElementById('settingNotifyDaily').checked = state.settings.notifyDaily || false;
+            document.getElementById('settingNotifyWeekly').checked = state.settings.notifyWeekly || false;
+        }
+
+        function saveCurrentProfile() {
+            saveProfileData(currentProfileName, { tasks: state.tasks, settings: state.settings });
+        }
+
+        function getDefaultTasks() {
+            return {
+                daily: DEFAULT_TASKS.daily.map(def => ({
+                    id: generateId(),
+                    name: def.name,
+                    hasCounter: def.hasCounter || false,
+                    maxCount: def.maxCount || 0,
+                    shopHint: def.shopHint || null
+                })),
+                weekly: DEFAULT_TASKS.weekly.map(def => ({
+                    id: generateId(),
+                    name: def.name,
+                    hasCounter: def.hasCounter || false,
+                    maxCount: def.maxCount || 0,
+                    shopHint: def.shopHint || null
+                })),
+                monthly: DEFAULT_TASKS.monthly.map(def => ({
+                    id: generateId(),
+                    name: def.name,
+                    hasCounter: def.hasCounter || false,
+                    maxCount: def.maxCount || 0,
+                    shopHint: def.shopHint || null
+                })),
+                custom: []
+            };
+        }
+
+        // ============================================================
+        //  DEFAULT TASKS (with shop hints as tooltips)
+        // ============================================================
+        const DEFAULT_TASKS = {
+            daily: [
+                { name: '10 Resistance Contracts', hasCounter: true, maxCount: 10, shopHint: null },
+                { name: '3 Co-op Dungeons', hasCounter: true, maxCount: 3, shopHint: null },
+                { name: 'Abyssal Token burn', hasCounter: false, maxCount: 0, shopHint: null },
+                { name: 'Mystic Keys', hasCounter: false, maxCount: 0, shopHint: 'Contract Coin Merchant' },
+                { name: 'Precious Blessing Pouch', hasCounter: false, maxCount: 0, shopHint: 'Contract Coin Merchant' },
+                { name: 'Recovery Crystals', hasCounter: false, maxCount: 0, shopHint: 'Guild Merchant' },
+                { name: 'Mana Potions', hasCounter: false, maxCount: 0, shopHint: 'Guild Merchant' },
+                { name: 'Eggs', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
+                { name: 'Golden Rye', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
+                { name: 'Honey', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
+                { name: 'Fishing Bait', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
+                { name: 'Guild Check-in', hasCounter: false, maxCount: 0, shopHint: null },
+                { name: 'Guild Donation', hasCounter: false, maxCount: 0, shopHint: null }
+            ],
+            weekly: [
+                { name: 'Weekly Missions', hasCounter: false, maxCount: 0, shopHint: null },
+                { name: 'Resistance Contracts (7x)', hasCounter: true, maxCount: 7, shopHint: 'Sundries Merchant' },
+                { name: 'Boss Raids', hasCounter: false, maxCount: 0, shopHint: null },
+                { name: 'Dimensional Trials', hasCounter: false, maxCount: 0, shopHint: null }
+            ],
+            monthly: [
+                { name: 'Battle Pass progress', hasCounter: false, maxCount: 0, shopHint: null },
+                { name: 'Monthly task objectives', hasCounter: false, maxCount: 0, shopHint: null }
+            ]
+        };
+
+        // ============================================================
+        //  RESET CATEGORY TO DEFAULT
+        // ============================================================
+        function resetCategoryToDefault(category) {
+            if (!confirm('Reset "' + category + '" tasks to default?')) return;
+            const defaults = DEFAULT_TASKS[category] || [];
+            state.tasks[category] = defaults.map(def => ({
+                id: generateId(),
+                name: def.name,
+                hasCounter: def.hasCounter || false,
+                maxCount: def.maxCount || 0,
+                shopHint: def.shopHint || null
+            }));
+            state.tasks[category].forEach(t => {
+                localStorage.removeItem(getTaskKey(t.id, category));
+                localStorage.removeItem(getCounterKey(t.id));
+            });
+            saveCurrentProfile();
+            renderAll();
+        }
 
         // ============================================================
         //  CONFIG - Reset at 08:00 UTC
@@ -1069,22 +1938,10 @@
         }
 
         // ============================================================
-        //  STORAGE
+        //  STORAGE HELPERS
         // ============================================================
-        function loadData() {
-            try {
-                const raw = localStorage.getItem('tl_data_v10');
-                if (raw) return JSON.parse(raw);
-            } catch (_) { /* ignore */ }
-            return null;
-        }
-
-        function saveData(data) {
-            localStorage.setItem('tl_data_v10', JSON.stringify(data));
-        }
-
         function getTaskKey(taskId, group) {
-            return 'tl_task_' + group + '_' + taskId;
+            return 'tl_task_' + group + '_' + taskId + '_' + currentProfileName;
         }
 
         function getTaskState(taskId, group) {
@@ -1098,7 +1955,7 @@
         }
 
         function getCounterKey(taskId) {
-            return 'tl_counter_' + taskId;
+            return 'tl_counter_' + taskId + '_' + currentProfileName;
         }
 
         function getCounterValue(taskId) {
@@ -1111,7 +1968,7 @@
         }
 
         function getTimerStartKey(taskId) {
-            return 'tl_timer_start_' + taskId;
+            return 'tl_timer_start_' + taskId + '_' + currentProfileName;
         }
 
         function getTimerStart(taskId) {
@@ -1128,7 +1985,7 @@
         }
 
         function getTimerDurationKey(taskId) {
-            return 'tl_timer_duration_' + taskId;
+            return 'tl_timer_duration_' + taskId + '_' + currentProfileName;
         }
 
         function getTimerDuration(taskId) {
@@ -1140,55 +1997,25 @@
             localStorage.setItem(getTimerDurationKey(taskId), duration.toString());
         }
 
-        // ============================================================
-        //  STATE
-        // ============================================================
-        let state = {
-            tasks: {
-                daily: [],
-                weekly: [],
-                monthly: [],
-                custom: []
-            }
-        };
+        function getLastCheckedKey() {
+            return 'tl_last_checked_' + currentProfileName;
+        }
 
-        // ============================================================
-        //  DEFAULT TASKS
-        // ============================================================
-        const DEFAULT_TASKS = {
-            daily: [
-                { name: '10 Resistance Contracts', hasCounter: true, maxCount: 10 },
-                { name: '3 Co-op Dungeons', hasCounter: true, maxCount: 3 },
-                { name: 'Abyssal Token burn', hasCounter: false, maxCount: 0 },
-                { name: 'Mystic Keys', hasCounter: false, maxCount: 0 },
-                { name: 'Precious Blessing Pouch', hasCounter: false, maxCount: 0 },
-                { name: 'Recovery Crystals', hasCounter: false, maxCount: 0 },
-                { name: 'Mana Potions', hasCounter: false, maxCount: 0 },
-                { name: 'Eggs', hasCounter: false, maxCount: 0 },
-                { name: 'Golden Rye', hasCounter: false, maxCount: 0 },
-                { name: 'Honey', hasCounter: false, maxCount: 0 },
-                { name: 'Fishing Bait', hasCounter: false, maxCount: 0 },
-                { name: 'Guild Check-in', hasCounter: false, maxCount: 0 },
-                { name: 'Guild Donation', hasCounter: false, maxCount: 0 }
-            ],
-            weekly: [
-                { name: 'Weekly Missions', hasCounter: false, maxCount: 0 },
-                { name: 'Resistance Contracts (7x)', hasCounter: true, maxCount: 7 },
-                { name: 'Boss Raids', hasCounter: false, maxCount: 0 },
-                { name: 'Dimensional Trials', hasCounter: false, maxCount: 0 }
-            ],
-            monthly: [
-                { name: 'Battle Pass progress', hasCounter: false, maxCount: 0 },
-                { name: 'Monthly task objectives', hasCounter: false, maxCount: 0 }
-            ]
-        };
+        function getLastCheckedDate() {
+            const val = localStorage.getItem(getLastCheckedKey());
+            return val || null;
+        }
+
+        function setLastCheckedDate(date) {
+            localStorage.setItem(getLastCheckedKey(), date);
+        }
 
         // ============================================================
         //  RENDER
         // ============================================================
         let liveTimerInterval = null;
 
-        function render() {
+        function renderAll() {
             renderList('daily');
             renderList('weekly');
             renderList('monthly');
@@ -1197,6 +2024,7 @@
             updateCountdowns();
             updateLastReset();
             startLiveTimers();
+            document.getElementById('notesStatus').textContent = 'Saved';
         }
 
         function renderList(group) {
@@ -1239,6 +2067,7 @@
                     if (this.checked) li.classList.add('done');
                     else li.classList.remove('done');
                     updateProgress();
+                    saveCurrentProfile();
                 });
                 left.appendChild(cb);
 
@@ -1246,6 +2075,17 @@
                 span.className = 'task-text';
                 span.textContent = task.name;
                 left.appendChild(span);
+
+                if (task.shopHint) {
+                    const trigger = document.createElement('span');
+                    trigger.className = 'shop-hint-trigger';
+                    trigger.textContent = '📍';
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'tooltip-text';
+                    tooltip.textContent = task.shopHint;
+                    trigger.appendChild(tooltip);
+                    left.appendChild(trigger);
+                }
 
                 li.appendChild(left);
 
@@ -1276,6 +2116,7 @@
                                 }
                             }
                             updateProgress();
+                            saveCurrentProfile();
                         }
                     });
                     counterGroup.appendChild(minusBtn);
@@ -1320,6 +2161,7 @@
                                 }
                             }
                             updateProgress();
+                            saveCurrentProfile();
                         }
                     });
                     counterGroup.appendChild(plusBtn);
@@ -1356,6 +2198,9 @@
                                     '</span>';
                             } else {
                                 displayText = '✅ <span class="countdown-done">Ready to reset!</span>';
+                                if (state.settings.notifyCustom !== false) {
+                                    notifyUser('⏰ ' + task.name + ' is ready to reset!');
+                                }
                             }
                         } else if (isChecked) {
                             displayText = '⏱️ <span class="countdown-live">Waiting...</span>';
@@ -1383,8 +2228,8 @@
                     const newName = prompt('Edit task name:', task.name);
                     if (newName !== null && newName.trim() !== '') {
                         task.name = newName.trim();
-                        saveData(state);
-                        render();
+                        saveCurrentProfile();
+                        renderAll();
                     }
                 });
                 actions.appendChild(editBtn);
@@ -1403,8 +2248,8 @@
                             clearTimerStart(task.id);
                             localStorage.removeItem(getTimerDurationKey(task.id));
                         }
-                        saveData(state);
-                        render();
+                        saveCurrentProfile();
+                        renderAll();
                     }
                 });
                 actions.appendChild(delBtn);
@@ -1450,7 +2295,7 @@
         }
 
         function updateLastReset() {
-            const last = localStorage.getItem('tl_last_reset_time_v10');
+            const last = localStorage.getItem('tl_last_reset_time_' + currentProfileName);
             if (last) {
                 try {
                     const d = new Date(parseInt(last));
@@ -1494,6 +2339,9 @@
                                 '</span>';
                         } else {
                             displayText = '✅ <span class="countdown-done">Ready to reset!</span>';
+                            if (state.settings.notifyCustom !== false) {
+                                notifyUser('⏰ ' + task.name + ' is ready to reset!');
+                            }
                         }
                     } else if (isChecked) {
                         displayText = '⏱️ <span class="countdown-live">Waiting...</span>';
@@ -1508,14 +2356,75 @@
         }
 
         // ============================================================
-        //  RESET LOGIC
+        //  NOTIFICATIONS
+        // ============================================================
+        function notifyUser(message) {
+            if (!('Notification' in window)) return;
+            if (Notification.permission === 'granted') {
+                new Notification('T&L Tracker', {
+                    body: message,
+                    icon: '⚔️'
+                });
+                document.getElementById('notificationDot').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('notificationDot').classList.remove('show');
+                }, 5000);
+            } else if (Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        document.getElementById('notificationBell').addEventListener('click', function() {
+            if (!('Notification' in window)) {
+                alert('Notifications are not supported in this browser.');
+                return;
+            }
+            if (Notification.permission === 'granted') {
+                new Notification('T&L Tracker', {
+                    body: 'Notifications are enabled!',
+                    icon: '⚔️'
+                });
+            } else if (Notification.permission === 'default') {
+                Notification.requestPermission();
+            } else {
+                alert('Notifications are blocked. Please enable them in your browser settings.');
+            }
+        });
+
+        // ============================================================
+        //  RESET LOGIC (with catch-up)
         // ============================================================
         function checkResets() {
             const now = new Date();
             let changed = false;
+            const today = now.toISOString().split('T')[0];
+            const lastChecked = getLastCheckedDate();
+
+            if (lastChecked && lastChecked !== today) {
+                state.tasks.daily.forEach(t => {
+                    setTaskState(t.id, 'daily', false);
+                    if (t.hasCounter) setCounterValue(t.id, 0);
+                });
+                const dayOfWeek = now.getUTCDay();
+                if (dayOfWeek === 2) {
+                    state.tasks.weekly.forEach(t => {
+                        setTaskState(t.id, 'weekly', false);
+                        if (t.hasCounter) setCounterValue(t.id, 0);
+                    });
+                }
+                const dayOfMonth = now.getUTCDate();
+                if (dayOfMonth === 1) {
+                    state.tasks.monthly.forEach(t => {
+                        setTaskState(t.id, 'monthly', false);
+                        if (t.hasCounter) setCounterValue(t.id, 0);
+                    });
+                }
+                changed = true;
+                localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
+            }
 
             const dailyReset = getDailyReset();
-            const dailyKey = 'tl_reset_daily_v10_' + dailyReset.toISOString().split('T')[0];
+            const dailyKey = 'tl_reset_daily_' + currentProfileName + '_' + dailyReset.toISOString().split('T')[0];
             if (now >= dailyReset && !localStorage.getItem(dailyKey)) {
                 state.tasks.daily.forEach(t => {
                     setTaskState(t.id, 'daily', false);
@@ -1523,11 +2432,11 @@
                 });
                 localStorage.setItem(dailyKey, 'true');
                 changed = true;
-                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
+                localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
             }
 
             const weeklyReset = getWeeklyReset();
-            const weeklyKey = 'tl_reset_weekly_v10_' + weeklyReset.toISOString().split('T')[0];
+            const weeklyKey = 'tl_reset_weekly_' + currentProfileName + '_' + weeklyReset.toISOString().split('T')[0];
             if (now >= weeklyReset && !localStorage.getItem(weeklyKey)) {
                 state.tasks.weekly.forEach(t => {
                     setTaskState(t.id, 'weekly', false);
@@ -1535,11 +2444,11 @@
                 });
                 localStorage.setItem(weeklyKey, 'true');
                 changed = true;
-                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
+                localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
             }
 
             const monthlyReset = getMonthlyReset();
-            const monthlyKey = 'tl_reset_monthly_v10_' + monthlyReset.toISOString().split('T')[0];
+            const monthlyKey = 'tl_reset_monthly_' + currentProfileName + '_' + monthlyReset.toISOString().split('T')[0];
             if (now >= monthlyReset && !localStorage.getItem(monthlyKey)) {
                 state.tasks.monthly.forEach(t => {
                     setTaskState(t.id, 'monthly', false);
@@ -1547,20 +2456,24 @@
                 });
                 localStorage.setItem(monthlyKey, 'true');
                 changed = true;
-                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
+                localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
             }
 
             state.tasks.custom.forEach(t => {
                 if (t.customTimer) {
                     if (t.customTimer.type === 'datetime') {
                         const resetTime = new Date(t.customTimer.value);
-                        const key = 'tl_custom_reset_' + t.id + '_' + resetTime.toISOString().split('T')[0];
+                        const key = 'tl_custom_reset_' + t.id + '_' + currentProfileName + '_' + resetTime.toISOString()
+                            .split('T')[0];
                         if (!isNaN(resetTime) && now >= resetTime && !localStorage.getItem(key)) {
                             setTaskState(t.id, 'custom', false);
                             if (t.hasCounter) setCounterValue(t.id, 0);
                             localStorage.setItem(key, 'true');
                             changed = true;
-                            localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
+                            localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
+                            if (state.settings.notifyCustom !== false) {
+                                notifyUser('⏰ ' + t.name + ' has reset!');
+                            }
                         }
                     } else if (t.customTimer.type === 'countdown') {
                         const durationMs = t.customTimer.durationMs;
@@ -1581,61 +2494,27 @@
                                     }
                                 });
                                 changed = true;
-                                localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
+                                localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime()
+                                .toString());
+                                if (state.settings.notifyCustom !== false) {
+                                    notifyUser('⏰ ' + t.name + ' is ready to reset!');
+                                }
                             }
                         }
                     }
                 }
             });
 
+            setLastCheckedDate(today);
+
             if (changed) {
-                saveData(state);
-                render();
+                saveCurrentProfile();
+                renderAll();
             }
         }
 
         // ============================================================
-        //  SAVE / LOAD STATE
-        // ============================================================
-        function saveState() {
-            saveData(state);
-        }
-
-        function loadState() {
-            const saved = loadData();
-            if (saved && saved.tasks) {
-                const groups = ['daily', 'weekly', 'monthly'];
-                groups.forEach(g => {
-                    const defaultItems = DEFAULT_TASKS[g] || [];
-                    const savedItems = saved.tasks[g] || [];
-                    const merged = defaultItems.map(def => {
-                        const existing = savedItems.find(t => t.name === def.name);
-                        return existing ? existing : {
-                            id: generateId(),
-                            name: def.name,
-                            hasCounter: def.hasCounter || false,
-                            maxCount: def.maxCount || 0
-                        };
-                    });
-                    state.tasks[g] = merged;
-                });
-                state.tasks.custom = saved.tasks.custom || [];
-            } else {
-                ['daily', 'weekly', 'monthly'].forEach(g => {
-                    state.tasks[g] = DEFAULT_TASKS[g].map(def => ({
-                        id: generateId(),
-                        name: def.name,
-                        hasCounter: def.hasCounter || false,
-                        maxCount: def.maxCount || 0
-                    }));
-                });
-                state.tasks.custom = [];
-            }
-            saveState();
-        }
-
-        // ============================================================
-        //  ADD CUSTOM TASK (Main)
+        //  ADD CUSTOM TASK
         // ============================================================
         function addCustomTask() {
             const input = document.getElementById('customTaskInput');
@@ -1686,12 +2565,13 @@
                 name: name,
                 hasCounter: hasCounter,
                 maxCount: maxCount || 0,
+                shopHint: null,
                 customTimer: customTimer
             };
 
             state.tasks.custom.push(task);
-            saveState();
-            render();
+            saveCurrentProfile();
+            renderAll();
             input.value = '';
             dateTimeInput.value = '';
             countdownInput.value = '';
@@ -1759,6 +2639,7 @@
                         name: name,
                         hasCounter: hasCounter,
                         maxCount: maxCount || 0,
+                        shopHint: null,
                         customTimer: customTimer
                     };
 
@@ -1767,8 +2648,8 @@
                     } else {
                         state.tasks[target].push(task);
                     }
-                    saveState();
-                    render();
+                    saveCurrentProfile();
+                    renderAll();
                     input.value = '';
                     if (countdown) countdown.value = '';
                     row.classList.remove('show');
@@ -1799,11 +2680,18 @@
                 });
             });
             const now = new Date();
-            localStorage.setItem('tl_reset_daily_v10_' + getDailyReset().toISOString().split('T')[0], 'true');
-            localStorage.setItem('tl_reset_weekly_v10_' + getWeeklyReset().toISOString().split('T')[0], 'true');
-            localStorage.setItem('tl_reset_monthly_v10_' + getMonthlyReset().toISOString().split('T')[0], 'true');
-            localStorage.setItem('tl_last_reset_time_v10', now.getTime().toString());
-            render();
+            const dailyReset = getDailyReset();
+            localStorage.setItem('tl_reset_daily_' + currentProfileName + '_' + dailyReset.toISOString().split('T')[0],
+            'true');
+            const weeklyReset = getWeeklyReset();
+            localStorage.setItem('tl_reset_weekly_' + currentProfileName + '_' + weeklyReset.toISOString().split('T')[0],
+                'true');
+            const monthlyReset = getMonthlyReset();
+            localStorage.setItem('tl_reset_monthly_' + currentProfileName + '_' + monthlyReset.toISOString().split('T')[0],
+                'true');
+            localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
+            saveCurrentProfile();
+            renderAll();
         }
 
         function deleteAllCustom() {
@@ -1815,17 +2703,123 @@
                 localStorage.removeItem(getTimerDurationKey(t.id));
             });
             state.tasks.custom = [];
-            saveState();
-            render();
+            saveCurrentProfile();
+            renderAll();
         }
 
         // ============================================================
-        //  INIT
+        //  NOTES
+        // ============================================================
+        document.getElementById('saveNotesBtn').addEventListener('click', function() {
+            const notes = document.getElementById('notesTextarea').value;
+            saveProfileNotes(currentProfileName, notes);
+            document.getElementById('notesStatus').textContent = '✅ Saved!';
+            setTimeout(() => {
+                document.getElementById('notesStatus').textContent = 'Saved';
+            }, 2000);
+        });
+
+        let notesTimeout;
+        document.getElementById('notesTextarea').addEventListener('input', function() {
+            clearTimeout(notesTimeout);
+            document.getElementById('notesStatus').textContent = 'Saving...';
+            notesTimeout = setTimeout(() => {
+                const notes = document.getElementById('notesTextarea').value;
+                saveProfileNotes(currentProfileName, notes);
+                document.getElementById('notesStatus').textContent = '✅ Saved!';
+                setTimeout(() => {
+                    document.getElementById('notesStatus').textContent = 'Saved';
+                }, 1500);
+            }, 500);
+        });
+
+        // ============================================================
+        //  SETTINGS
+        // ============================================================
+        document.getElementById('saveSettingsBtn').addEventListener('click', function() {
+            state.settings.notifyCustom = document.getElementById('settingNotifyCustom').checked;
+            state.settings.notifyDaily = document.getElementById('settingNotifyDaily').checked;
+            state.settings.notifyWeekly = document.getElementById('settingNotifyWeekly').checked;
+            saveCurrentProfile();
+            alert('✅ Settings saved!');
+        });
+
+        // ============================================================
+        //  DATA MANAGEMENT
+        // ============================================================
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            const profiles = getProfiles();
+            const allData = {};
+            profiles.forEach(p => {
+                allData[p] = {
+                    data: getProfileData(p),
+                    notes: getProfileNotes(p)
+                };
+            });
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tl_tracker_backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importDataBtn').addEventListener('click', function() {
+            const input = document.getElementById('importDataInput');
+            if (!input.files || !input.files[0]) {
+                alert('Please select a backup file first.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!confirm('This will overwrite all current data. Continue?')) return;
+                    const profiles = Object.keys(data);
+                    profiles.forEach(p => {
+                        if (data[p].data) saveProfileData(p, data[p].data);
+                        if (data[p].notes !== undefined) saveProfileNotes(p, data[p].notes);
+                    });
+                    saveProfiles(profiles);
+                    setCurrentProfile(profiles[0]);
+                    renderProfiles();
+                    loadCurrentProfile();
+                    renderAll();
+                    alert('✅ Data imported successfully!');
+                } catch (err) {
+                    alert('❌ Invalid backup file.');
+                }
+            };
+            reader.readAsText(input.files[0]);
+        });
+
+        document.getElementById('clearDataBtn').addEventListener('click', function() {
+            if (!confirm('⚠️ This will delete ALL data for ALL profiles. Are you sure?')) return;
+            if (!confirm('⚠️ This is permanent! Are you REALLY sure?')) return;
+            const profiles = getProfiles();
+            profiles.forEach(p => {
+                localStorage.removeItem('tl_data_' + p);
+                localStorage.removeItem('tl_notes_' + p);
+            });
+            localStorage.removeItem('tl_profiles');
+            localStorage.removeItem('tl_current_profile');
+            saveProfiles(['Character 1']);
+            setCurrentProfile('Character 1');
+            renderProfiles();
+            loadCurrentProfile();
+            renderAll();
+            alert('🗑️ All data cleared.');
+        });
+
+        // ============================================================
+        //  MAIN INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            loadState();
+            renderProfiles();
+            loadCurrentProfile();
             checkResets();
-            render();
+            renderAll();
 
             setInterval(function() {
                 updateCountdowns();
