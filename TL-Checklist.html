@@ -97,7 +97,7 @@
             transition: background 0.3s, color 0.3s;
         }
         #app {
-            max-width: 1300px;
+            max-width: 1500px;
             margin: 0 auto;
             background: var(--bg-app);
             padding: 20px 24px;
@@ -503,6 +503,7 @@
         .middle-content {
             flex: 1;
             min-width: 0;
+            max-width: 100%;
         }
 
         /* ===== CHECKLIST GRID ===== */
@@ -575,19 +576,22 @@
             padding: 0;
             margin-top: 6px;
         }
+
+        /* ===== TASK ITEMS ===== */
         .section li {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 6px 12px;
+            padding: 8px 14px;
             margin: 3px 0;
             background: var(--bg-task);
             border-radius: 6px;
             transition: 0.2s, background 0.3s;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 12px;
+            flex-wrap: nowrap;
             cursor: pointer;
             font-size: 0.95rem;
+            min-height: 44px;
         }
         .section li:hover {
             background: var(--bg-hover);
@@ -598,6 +602,14 @@
             gap: 10px;
             flex: 1;
             min-width: 120px;
+            overflow: hidden;
+        }
+        .section li .task-text {
+            transition: 0.2s, color 0.3s;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .section li input[type="checkbox"] {
             width: 18px;
@@ -607,19 +619,82 @@
             flex-shrink: 0;
             transition: accent-color 0.3s;
         }
-        .section li .task-text {
-            transition: 0.2s, color 0.3s;
-            font-size: 0.95rem;
+        .section li.done .task-text {
+            text-decoration: line-through;
+            color: var(--text-secondary);
         }
-        .shop-hint-trigger {
-            display: inline-block;
-            position: relative;
-            cursor: help;
-            margin-left: 6px;
-            color: var(--text-muted);
+        .section li.done {
+            opacity: 0.6;
+        }
+
+        /* ===== TASK RIGHT SIDE (Counter + Actions) ===== */
+        .section li .task-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        /* ===== COUNTER ===== */
+        .section li .counter-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-input);
+            padding: 2px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s, background 0.3s, color 0.3s;
+            user-select: none;
+            flex-shrink: 0;
+            min-width: 50px;
+            justify-content: center;
+        }
+        .section li .counter-group:hover {
+            background: var(--bg-hover);
+        }
+        .section li .counter-group .counter-num {
+            color: var(--accent-gold);
+            font-weight: 700;
+            min-width: 14px;
+            text-align: center;
+            transition: color 0.3s;
+        }
+        .section li .counter-group .counter-label {
             font-size: 0.7rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
         }
-        .shop-hint-trigger .tooltip-text {
+        .section li .counter-group .counter-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 2px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .section li .counter-group .counter-btn:hover {
+            color: var(--accent-gold);
+        }
+
+        /* ===== SHOP HINT (Pin) ===== */
+        .section li .shop-hint-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: help;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            width: 24px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .section li .shop-hint-trigger .tooltip-text {
             visibility: hidden;
             opacity: 0;
             width: 200px;
@@ -640,7 +715,7 @@
             white-space: normal;
             box-shadow: 0 4px 12px var(--shadow-color);
         }
-        .shop-hint-trigger .tooltip-text::after {
+        .section li .shop-hint-trigger .tooltip-text::after {
             content: "";
             position: absolute;
             top: 100%;
@@ -649,21 +724,17 @@
             border: 6px solid transparent;
             border-top-color: var(--border-color);
         }
-        .shop-hint-trigger:hover .tooltip-text {
+        .section li .shop-hint-trigger:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
         }
-        .section li.done .task-text {
-            text-decoration: line-through;
-            color: var(--text-secondary);
-        }
-        .section li.done {
-            opacity: 0.6;
-        }
+
+        /* ===== TASK ACTIONS (Edit + Delete) ===== */
         .section li .task-actions {
             display: flex;
             gap: 4px;
             align-items: center;
+            flex-shrink: 0;
         }
         .section li .task-actions button {
             background: none;
@@ -674,6 +745,11 @@
             padding: 2px 6px;
             border-radius: 4px;
             transition: 0.2s;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         .section li .task-actions button:hover {
             color: var(--accent-gold);
@@ -683,48 +759,7 @@
             color: var(--accent-red);
         }
 
-        .counter-group {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            background: var(--bg-input);
-            padding: 2px 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s, background 0.3s, color 0.3s;
-            user-select: none;
-        }
-        .counter-group:hover {
-            background: var(--bg-hover);
-        }
-        .counter-group .counter-num {
-            color: var(--accent-gold);
-            font-weight: 700;
-            min-width: 14px;
-            text-align: center;
-            transition: color 0.3s;
-        }
-        .counter-group .counter-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            transition: color 0.3s;
-        }
-        .counter-group .counter-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0 2px;
-            line-height: 1;
-            transition: color 0.2s;
-        }
-        .counter-group .counter-btn:hover {
-            color: var(--accent-gold);
-        }
-
+        /* ===== CUSTOM TIMER DISPLAY ===== */
         .custom-timer-display {
             font-size: 0.7rem;
             color: var(--text-secondary);
@@ -755,6 +790,7 @@
             grid-column: 1 / -1;
         }
 
+        /* ===== ADD TASK ROW ===== */
         .add-task-row {
             display: flex;
             gap: 10px;
@@ -806,6 +842,7 @@
             min-width: 60px;
         }
 
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 7px 20px;
             border: none;
@@ -847,6 +884,7 @@
             margin-top: 14px;
         }
 
+        /* ===== MISC ===== */
         .footer-text {
             margin-top: 16px;
             font-size: 0.8rem;
@@ -883,13 +921,8 @@
             margin-top: 4px;
             transition: color 0.3s;
         }
-        .task-right {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             #app {
                 padding: 12px;
@@ -900,8 +933,19 @@
             .add-task-row .field-group {
                 min-width: 100%;
             }
+            .section li {
+                flex-wrap: wrap;
+                min-height: auto;
+                padding: 8px 10px;
+            }
+            .section li .task-right {
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-left: 28px;
+            }
         }
 
+        /* ===== SECTION QUICK ADD ===== */
         .quick-add-row {
             display: none;
             gap: 8px;
@@ -934,7 +978,7 @@
             font-size: 0.75rem;
         }
 
-        /* GUIDES - ACCORDION */
+        /* ===== GUIDES - ACCORDION ===== */
         .guide-accordion {
             background: var(--bg-card);
             border-radius: 10px;
@@ -1178,7 +1222,6 @@
         .guide-category:first-of-type {
             margin-top: 0;
         }
-        /* Data Management cleaner layout */
         .data-row {
             display: flex;
             align-items: center;
@@ -1321,6 +1364,8 @@
                             </h2>
                             <div class="quick-add-row" id="quickAdd-daily">
                                 <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                <input type="number" placeholder="Max" class="quick-add-max" value="1" min="1" />
+                                <input type="text" placeholder="Location" class="quick-add-location" />
                                 <button class="btn btn-sm btn-primary quick-add-confirm" data-target="daily">Add</button>
                                 <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
                             </div>
@@ -1340,6 +1385,8 @@
                                 </h2>
                                 <div class="quick-add-row" id="quickAdd-weekly">
                                     <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                    <input type="number" placeholder="Max" class="quick-add-max" value="1" min="1" />
+                                    <input type="text" placeholder="Location" class="quick-add-location" />
                                     <button class="btn btn-sm btn-primary quick-add-confirm" data-target="weekly">Add</button>
                                     <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
                                 </div>
@@ -1356,6 +1403,8 @@
                                 </h2>
                                 <div class="quick-add-row" id="quickAdd-monthly">
                                     <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                    <input type="number" placeholder="Max" class="quick-add-max" value="1" min="1" />
+                                    <input type="text" placeholder="Location" class="quick-add-location" />
                                     <button class="btn btn-sm btn-primary quick-add-confirm" data-target="monthly">Add</button>
                                     <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
                                 </div>
@@ -1374,6 +1423,8 @@
                             </h2>
                             <div class="quick-add-row" id="quickAdd-custom">
                                 <input type="text" placeholder="Task name..." class="quick-add-input" />
+                                <input type="number" placeholder="Max" class="quick-add-max" value="1" min="1" />
+                                <input type="text" placeholder="Location" class="quick-add-location" />
                                 <input type="text" placeholder="Countdown (e.g. 6:21)" class="quick-add-countdown" />
                                 <button class="btn btn-sm btn-primary quick-add-confirm" data-target="custom">Add</button>
                                 <button class="btn btn-sm btn-warning quick-add-cancel">✕</button>
@@ -1386,7 +1437,15 @@
                     <div class="add-task-row">
                         <div class="field-group" style="flex:2;">
                             <label>Task Name</label>
-                            <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, 5x Training, Amitoi" />
+                            <input type="text" id="customTaskInput" placeholder="e.g. Daily Login, Amitoi" />
+                        </div>
+                        <div class="field-group">
+                            <label>Max Count</label>
+                            <input type="number" id="customTaskMax" value="1" min="1" />
+                        </div>
+                        <div class="field-group">
+                            <label>Location</label>
+                            <input type="text" id="customTaskLocation" placeholder="e.g. Sundries Merchant" />
                         </div>
                         <div class="field-group">
                             <label>Reset at (Date &amp; Time)</label>
@@ -1468,7 +1527,6 @@
         <div class="page" id="page-guides">
             <h2 style="color:var(--accent-gold); margin-bottom:14px;">📖 Guides</h2>
 
-            <!-- Only one guide: How to Use This Tracker -->
             <div class="guide-accordion">
                 <div class="guide-accordion-header" onclick="toggleGuide(this)">
                     <h3>📋 How to Use This Tracker</h3>
@@ -1478,7 +1536,7 @@
                     <p>Here's how to get the most out of your T&amp;L Tracker:</p>
                     <ul>
                         <li><strong>Profiles:</strong> Use the dropdown at the top left to switch between characters. Click <strong>+</strong> to add a new character (max 6).</li>
-                        <li><strong>Daily/Weekly/Monthly Tasks:</strong> Check off tasks as you complete them. Tasks with counters (like "3 Co-op Dungeons") let you track partial progress with <strong>+</strong> and <strong>−</strong> buttons.</li>
+                        <li><strong>Daily/Weekly/Monthly Tasks:</strong> Check off tasks as you complete them. Tasks with counters (like "Co-op Dungeons") let you track partial progress with <strong>+</strong> and <strong>−</strong> buttons.</li>
                         <li><strong>Custom Tasks:</strong> Add your own tasks with optional countdown timers. The timer starts when you check the task as done.</li>
                         <li><strong>Shop Hints:</strong> Hover over the 📍 icon next to a task to see where to buy that item.</li>
                         <li><strong>Progress Bars:</strong> The left sidebar shows your overall progress for each category.</li>
@@ -1790,56 +1848,57 @@
                 daily: DEFAULT_TASKS.daily.map(def => ({
                     id: generateId(),
                     name: def.name,
-                    hasCounter: def.hasCounter || false,
-                    maxCount: def.maxCount || 0,
-                    shopHint: def.shopHint || null
+                    hasCounter: def.maxCount > 1,
+                    maxCount: def.maxCount || 1,
+                    shopHint: def.shopHint || 'N/A',
+                    isDefault: true
                 })),
                 weekly: DEFAULT_TASKS.weekly.map(def => ({
                     id: generateId(),
                     name: def.name,
-                    hasCounter: def.hasCounter || false,
-                    maxCount: def.maxCount || 0,
-                    shopHint: def.shopHint || null
+                    hasCounter: def.maxCount > 1,
+                    maxCount: def.maxCount || 1,
+                    shopHint: def.shopHint || 'N/A',
+                    isDefault: true
                 })),
                 monthly: DEFAULT_TASKS.monthly.map(def => ({
                     id: generateId(),
                     name: def.name,
-                    hasCounter: def.hasCounter || false,
-                    maxCount: def.maxCount || 0,
-                    shopHint: def.shopHint || null
+                    hasCounter: def.maxCount > 1,
+                    maxCount: def.maxCount || 1,
+                    shopHint: def.shopHint || 'N/A',
+                    isDefault: true
                 })),
                 custom: []
             };
         }
 
         // ============================================================
-        //  DEFAULT TASKS (with shop hints as tooltips)
+        //  DEFAULT TASKS (Numbers removed from names)
         // ============================================================
         const DEFAULT_TASKS = {
             daily: [
-                { name: '10 Resistance Contracts', hasCounter: true, maxCount: 10, shopHint: null },
-                { name: '3 Co-op Dungeons', hasCounter: true, maxCount: 3, shopHint: null },
-                { name: 'Abyssal Token burn', hasCounter: false, maxCount: 0, shopHint: null },
-                { name: 'Mystic Keys', hasCounter: false, maxCount: 0, shopHint: 'Contract Coin Merchant' },
-                { name: 'Precious Blessing Pouch', hasCounter: false, maxCount: 0, shopHint: 'Contract Coin Merchant' },
-                { name: 'Recovery Crystals', hasCounter: false, maxCount: 0, shopHint: 'Guild Merchant' },
-                { name: 'Mana Potions', hasCounter: false, maxCount: 0, shopHint: 'Guild Merchant' },
-                { name: 'Eggs', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
-                { name: 'Golden Rye', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
-                { name: 'Honey', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
-                { name: 'Fishing Bait', hasCounter: false, maxCount: 0, shopHint: 'Sundries Merchant' },
-                { name: 'Guild Check-in', hasCounter: false, maxCount: 0, shopHint: null },
-                { name: 'Guild Donation', hasCounter: false, maxCount: 0, shopHint: null }
+                { name: 'Resistance Contracts', maxCount: 10, shopHint: 'N/A' },
+                { name: 'Co-op Dungeons', maxCount: 3, shopHint: 'N/A' },
+                { name: 'Mystic Keys', maxCount: 5, shopHint: 'Contract Coin Merchant' },
+                { name: 'Precious Blessing Pouch', maxCount: 3, shopHint: 'Contract Coin Merchant' },
+                { name: 'Recovery Crystals', maxCount: 10, shopHint: 'Guild Merchant' },
+                { name: 'Mana Potions', maxCount: 10, shopHint: 'Guild Merchant' },
+                { name: 'Eggs', maxCount: 5, shopHint: 'Sundries Merchant' },
+                { name: 'Golden Rye', maxCount: 5, shopHint: 'Sundries Merchant' },
+                { name: 'Honey', maxCount: 5, shopHint: 'Sundries Merchant' },
+                { name: 'Fishing Bait', maxCount: 10, shopHint: 'Sundries Merchant' },
+                { name: 'Guild Donation', maxCount: 1, shopHint: 'N/A' }
             ],
             weekly: [
-                { name: 'Weekly Missions', hasCounter: false, maxCount: 0, shopHint: null },
-                { name: 'Resistance Contracts (7x)', hasCounter: true, maxCount: 7, shopHint: 'Sundries Merchant' },
-                { name: 'Boss Raids', hasCounter: false, maxCount: 0, shopHint: null },
-                { name: 'Dimensional Trials', hasCounter: false, maxCount: 0, shopHint: null }
+                { name: 'Weekly Missions', maxCount: 1, shopHint: 'N/A' },
+                { name: 'Resistance Contracts', maxCount: 7, shopHint: 'Sundries Merchant' },
+                { name: 'Boss Raids', maxCount: 1, shopHint: 'N/A' },
+                { name: 'Dimensional Trials', maxCount: 1, shopHint: 'N/A' }
             ],
             monthly: [
-                { name: 'Battle Pass progress', hasCounter: false, maxCount: 0, shopHint: null },
-                { name: 'Monthly task objectives', hasCounter: false, maxCount: 0, shopHint: null }
+                { name: 'Battle Pass progress', maxCount: 1, shopHint: 'N/A' },
+                { name: 'Monthly task objectives', maxCount: 1, shopHint: 'N/A' }
             ]
         };
 
@@ -1852,9 +1911,10 @@
             state.tasks[category] = defaults.map(def => ({
                 id: generateId(),
                 name: def.name,
-                hasCounter: def.hasCounter || false,
-                maxCount: def.maxCount || 0,
-                shopHint: def.shopHint || null
+                hasCounter: def.maxCount > 1,
+                maxCount: def.maxCount || 1,
+                shopHint: def.shopHint || 'N/A',
+                isDefault: true
             }));
             state.tasks[category].forEach(t => {
                 localStorage.removeItem(getTaskKey(t.id, category));
@@ -2046,6 +2106,7 @@
                     }
                 });
 
+                // LEFT: Checkbox + Task Name
                 const left = document.createElement('div');
                 left.className = 'task-left';
 
@@ -2076,23 +2137,15 @@
                 span.textContent = task.name;
                 left.appendChild(span);
 
-                if (task.shopHint) {
-                    const trigger = document.createElement('span');
-                    trigger.className = 'shop-hint-trigger';
-                    trigger.textContent = '📍';
-                    const tooltip = document.createElement('span');
-                    tooltip.className = 'tooltip-text';
-                    tooltip.textContent = task.shopHint;
-                    trigger.appendChild(tooltip);
-                    left.appendChild(trigger);
-                }
-
                 li.appendChild(left);
 
+                // RIGHT: Counter (if hasCounter) + Pin + Actions
                 const right = document.createElement('div');
                 right.className = 'task-right';
 
-                if (task.hasCounter && task.maxCount > 0) {
+                // Counter - only show if hasCounter is true (maxCount > 1)
+                if (task.hasCounter && task.maxCount > 1) {
+                    const maxCount = task.maxCount;
                     const counterGroup = document.createElement('div');
                     counterGroup.className = 'counter-group';
 
@@ -2105,13 +2158,12 @@
                         if (val > 0) {
                             val--;
                             setCounterValue(task.id, val);
-                            updateCounterDisplay(counterGroup, val, task.maxCount);
+                            updateCounterDisplay(counterGroup, val, maxCount);
                             if (val === 0) {
                                 setTaskState(task.id, group, false);
                                 li.classList.remove('done');
                                 cb.checked = false;
-                                if (group === 'custom' && task.customTimer && task.customTimer.type ===
-                                    'countdown') {
+                                if (group === 'custom' && task.customTimer && task.customTimer.type === 'countdown') {
                                     clearTimerStart(task.id);
                                 }
                             }
@@ -2129,7 +2181,7 @@
 
                     const maxSpan = document.createElement('span');
                     maxSpan.className = 'counter-label';
-                    maxSpan.textContent = '/' + task.maxCount;
+                    maxSpan.textContent = '/' + maxCount;
                     counterGroup.appendChild(maxSpan);
 
                     const plusBtn = document.createElement('button');
@@ -2138,16 +2190,15 @@
                     plusBtn.addEventListener('click', function(e) {
                         e.stopPropagation();
                         let val = getCounterValue(task.id);
-                        if (val < task.maxCount) {
+                        if (val < maxCount) {
                             val++;
                             setCounterValue(task.id, val);
-                            updateCounterDisplay(counterGroup, val, task.maxCount);
-                            if (val >= task.maxCount) {
+                            updateCounterDisplay(counterGroup, val, maxCount);
+                            if (val >= maxCount) {
                                 setTaskState(task.id, group, true);
                                 li.classList.add('done');
                                 cb.checked = true;
-                                if (group === 'custom' && task.customTimer && task.customTimer.type ===
-                                    'countdown') {
+                                if (group === 'custom' && task.customTimer && task.customTimer.type === 'countdown') {
                                     setTimerStart(task.id, Date.now());
                                     setTimerDuration(task.id, task.customTimer.durationMs);
                                 }
@@ -2155,8 +2206,7 @@
                                 setTaskState(task.id, group, false);
                                 li.classList.remove('done');
                                 cb.checked = false;
-                                if (group === 'custom' && task.customTimer && task.customTimer.type ===
-                                    'countdown') {
+                                if (group === 'custom' && task.customTimer && task.customTimer.type === 'countdown') {
                                     clearTimerStart(task.id);
                                 }
                             }
@@ -2169,6 +2219,17 @@
                     right.appendChild(counterGroup);
                 }
 
+                // Pin (📍) - always shown
+                const trigger = document.createElement('span');
+                trigger.className = 'shop-hint-trigger';
+                trigger.textContent = '📍';
+                const tooltip = document.createElement('span');
+                tooltip.className = 'tooltip-text';
+                tooltip.textContent = task.shopHint || 'N/A';
+                trigger.appendChild(tooltip);
+                right.appendChild(trigger);
+
+                // Custom timer display (only for custom tasks)
                 if (group === 'custom' && task.customTimer) {
                     const timerDisplay = document.createElement('span');
                     timerDisplay.className = 'custom-timer-display';
@@ -2217,6 +2278,7 @@
                     right.appendChild(timerDisplay);
                 }
 
+                // Actions (Edit + Delete)
                 const actions = document.createElement('div');
                 actions.className = 'task-actions';
 
@@ -2228,9 +2290,22 @@
                     const newName = prompt('Edit task name:', task.name);
                     if (newName !== null && newName.trim() !== '') {
                         task.name = newName.trim();
-                        saveCurrentProfile();
-                        renderAll();
                     }
+                    const newMax = prompt('Edit max count:', task.maxCount || 1);
+                    if (newMax !== null && !isNaN(parseInt(newMax)) && parseInt(newMax) > 0) {
+                        task.maxCount = parseInt(newMax);
+                        task.hasCounter = task.maxCount > 1;
+                    }
+                    const newLocation = prompt('Edit location:', task.shopHint || 'N/A');
+                    if (newLocation !== null) {
+                        task.shopHint = newLocation.trim() || 'N/A';
+                    }
+                    // If it's a default task, remove the isDefault flag so it doesn't get overwritten
+                    if (task.isDefault) {
+                        task.isDefault = false;
+                    }
+                    saveCurrentProfile();
+                    renderAll();
                 });
                 actions.appendChild(editBtn);
 
@@ -2272,14 +2347,10 @@
                 let total = 0;
                 let done = 0;
                 tasks.forEach(t => {
-                    if (t.hasCounter && t.maxCount > 0) {
-                        const val = getCounterValue(t.id);
-                        if (val >= t.maxCount) done++;
-                        total++;
-                    } else {
-                        total++;
-                        if (getTaskState(t.id, group)) done++;
-                    }
+                    const max = t.maxCount || 1;
+                    const val = getCounterValue(t.id);
+                    if (val >= max) done++;
+                    total++;
                 });
                 document.getElementById(group + 'Count').textContent = done + ' / ' + total;
                 const fill = document.getElementById(group + 'Fill');
@@ -2403,20 +2474,20 @@
             if (lastChecked && lastChecked !== today) {
                 state.tasks.daily.forEach(t => {
                     setTaskState(t.id, 'daily', false);
-                    if (t.hasCounter) setCounterValue(t.id, 0);
+                    setCounterValue(t.id, 0);
                 });
                 const dayOfWeek = now.getUTCDay();
                 if (dayOfWeek === 2) {
                     state.tasks.weekly.forEach(t => {
                         setTaskState(t.id, 'weekly', false);
-                        if (t.hasCounter) setCounterValue(t.id, 0);
+                        setCounterValue(t.id, 0);
                     });
                 }
                 const dayOfMonth = now.getUTCDate();
                 if (dayOfMonth === 1) {
                     state.tasks.monthly.forEach(t => {
                         setTaskState(t.id, 'monthly', false);
-                        if (t.hasCounter) setCounterValue(t.id, 0);
+                        setCounterValue(t.id, 0);
                     });
                 }
                 changed = true;
@@ -2428,7 +2499,7 @@
             if (now >= dailyReset && !localStorage.getItem(dailyKey)) {
                 state.tasks.daily.forEach(t => {
                     setTaskState(t.id, 'daily', false);
-                    if (t.hasCounter) setCounterValue(t.id, 0);
+                    setCounterValue(t.id, 0);
                 });
                 localStorage.setItem(dailyKey, 'true');
                 changed = true;
@@ -2440,7 +2511,7 @@
             if (now >= weeklyReset && !localStorage.getItem(weeklyKey)) {
                 state.tasks.weekly.forEach(t => {
                     setTaskState(t.id, 'weekly', false);
-                    if (t.hasCounter) setCounterValue(t.id, 0);
+                    setCounterValue(t.id, 0);
                 });
                 localStorage.setItem(weeklyKey, 'true');
                 changed = true;
@@ -2452,7 +2523,7 @@
             if (now >= monthlyReset && !localStorage.getItem(monthlyKey)) {
                 state.tasks.monthly.forEach(t => {
                     setTaskState(t.id, 'monthly', false);
-                    if (t.hasCounter) setCounterValue(t.id, 0);
+                    setCounterValue(t.id, 0);
                 });
                 localStorage.setItem(monthlyKey, 'true');
                 changed = true;
@@ -2467,7 +2538,7 @@
                             .split('T')[0];
                         if (!isNaN(resetTime) && now >= resetTime && !localStorage.getItem(key)) {
                             setTaskState(t.id, 'custom', false);
-                            if (t.hasCounter) setCounterValue(t.id, 0);
+                            setCounterValue(t.id, 0);
                             localStorage.setItem(key, 'true');
                             changed = true;
                             localStorage.setItem('tl_last_reset_time_' + currentProfileName, now.getTime().toString());
@@ -2482,7 +2553,7 @@
                             const elapsed = now.getTime() - startTime;
                             if (elapsed >= durationMs) {
                                 setTaskState(t.id, 'custom', false);
-                                if (t.hasCounter) setCounterValue(t.id, 0);
+                                setCounterValue(t.id, 0);
                                 clearTimerStart(t.id);
                                 const list = document.getElementById('customList');
                                 const items = list.querySelectorAll('li');
@@ -2514,10 +2585,12 @@
         }
 
         // ============================================================
-        //  ADD CUSTOM TASK
+        //  ADD CUSTOM TASK (Main)
         // ============================================================
         function addCustomTask() {
             const input = document.getElementById('customTaskInput');
+            const maxInput = document.getElementById('customTaskMax');
+            const locationInput = document.getElementById('customTaskLocation');
             const dateTimeInput = document.getElementById('customTaskDateTime');
             const countdownInput = document.getElementById('customTaskCountdown');
             const error = document.getElementById('errorMsg');
@@ -2528,6 +2601,10 @@
                 return;
             }
             error.textContent = '';
+
+            const maxCount = parseInt(maxInput.value) || 1;
+            const hasCounter = maxCount > 1;
+            const shopHint = locationInput.value.trim() || 'N/A';
 
             let customTimer = null;
             const dateTimeValue = dateTimeInput.value;
@@ -2552,20 +2629,13 @@
                 }
             }
 
-            let hasCounter = false;
-            let maxCount = 0;
-            const match = name.match(/(\d+)\s*[xX×*]\s*/);
-            if (match) {
-                hasCounter = true;
-                maxCount = parseInt(match[1]) || 0;
-            }
-
             const task = {
                 id: generateId(),
                 name: name,
                 hasCounter: hasCounter,
-                maxCount: maxCount || 0,
-                shopHint: null,
+                maxCount: maxCount,
+                shopHint: shopHint,
+                isDefault: false,
                 customTimer: customTimer
             };
 
@@ -2573,6 +2643,8 @@
             saveCurrentProfile();
             renderAll();
             input.value = '';
+            maxInput.value = '1';
+            locationInput.value = '';
             dateTimeInput.value = '';
             countdownInput.value = '';
             input.focus();
@@ -2607,9 +2679,15 @@
                     const target = this.dataset.target;
                     const row = document.getElementById('quickAdd-' + target);
                     const input = row.querySelector('.quick-add-input');
+                    const maxInput = row.querySelector('.quick-add-max');
+                    const locationInput = row.querySelector('.quick-add-location');
                     const countdown = row.querySelector('.quick-add-countdown');
                     const name = input.value.trim();
                     if (!name) return;
+
+                    const maxCount = parseInt(maxInput ? maxInput.value : 1) || 1;
+                    const hasCounter = maxCount > 1;
+                    const shopHint = (locationInput ? locationInput.value.trim() : '') || 'N/A';
 
                     let customTimer = null;
                     if (countdown) {
@@ -2626,20 +2704,13 @@
                         }
                     }
 
-                    let hasCounter = false;
-                    let maxCount = 0;
-                    const match = name.match(/(\d+)\s*[xX×*]\s*/);
-                    if (match) {
-                        hasCounter = true;
-                        maxCount = parseInt(match[1]) || 0;
-                    }
-
                     const task = {
                         id: generateId(),
                         name: name,
                         hasCounter: hasCounter,
-                        maxCount: maxCount || 0,
-                        shopHint: null,
+                        maxCount: maxCount,
+                        shopHint: shopHint,
+                        isDefault: false,
                         customTimer: customTimer
                     };
 
@@ -2651,6 +2722,8 @@
                     saveCurrentProfile();
                     renderAll();
                     input.value = '';
+                    if (maxInput) maxInput.value = '1';
+                    if (locationInput) locationInput.value = '';
                     if (countdown) countdown.value = '';
                     row.classList.remove('show');
                 });
@@ -2675,7 +2748,7 @@
             ['daily', 'weekly', 'monthly', 'custom'].forEach(g => {
                 state.tasks[g].forEach(t => {
                     setTaskState(t.id, g, false);
-                    if (t.hasCounter) setCounterValue(t.id, 0);
+                    setCounterValue(t.id, 0);
                     clearTimerStart(t.id);
                 });
             });
