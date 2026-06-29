@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.3] - 2026-06-29
+
+### Changed
+- App width increased from 1300px to 1500px
+- Task names no longer include numbers ("Resistance Contracts" instead of "10 Resistance Contracts")
+- Guild Check-in removed from Daily default tasks
+- Abyssal Token burn removed from Daily default tasks
+- Shop hints now shown as pin tooltips (📍) instead of inline text
+- Task rows have more spacing (padding increased, min-height added)
+- Edit button now allows changing max count and location
+- Quick Add now includes max count and location fields
+- Custom task form now includes max count and location fields
+
 ## [0.0.2] - 2026-06-27
 
 ### Added
