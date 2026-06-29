@@ -30,6 +30,10 @@
             --sticky-width: 200px;
             --nav-bg: #1a1a24;
             --nav-hover: #2a2a3a;
+            /* Build box colors */
+            --build-wishlist: #4fc3f7;
+            --build-progress: #ffa726;
+            --build-done: #66bb6a;
         }
 
         [data-theme="light"] {
@@ -52,6 +56,9 @@
             --scrollbar-thumb: #ccc;
             --nav-bg: #e8e8e8;
             --nav-hover: #d0d0d0;
+            --build-wishlist: #1a73e8;
+            --build-progress: #e65100;
+            --build-done: #2e7d32;
         }
 
         [data-theme="tl"] {
@@ -77,6 +84,9 @@
             --scrollbar-thumb: #5A4D6A;
             --nav-bg: #3D304A;
             --nav-hover: #5A4D6A;
+            --build-wishlist: #7c6af0;
+            --build-progress: #ffcc80;
+            --build-done: #b39ddb;
         }
 
         /* ===== GENERAL STYLES ===== */
@@ -164,6 +174,7 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: border-color 0.3s, background 0.3s, color 0.3s;
+            min-width: 140px;
         }
         .profile-selector select:focus {
             outline: 2px solid var(--accent-gold);
@@ -171,6 +182,20 @@
         .profile-selector .btn-sm {
             padding: 4px 10px;
             font-size: 0.7rem;
+        }
+        .profile-selector .edit-profile-btn {
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .profile-selector .edit-profile-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
         }
         .header-right {
             display: flex;
@@ -1053,6 +1078,7 @@
             outline: 2px solid var(--accent-gold);
         }
 
+        /* ===== CALCULATORS ===== */
         .calc-card {
             background: var(--bg-card);
             padding: 16px 20px;
@@ -1275,6 +1301,376 @@
         .settings-actions .btn {
             flex: 0;
         }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-card);
+            padding: 24px 28px;
+            border-radius: 12px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 8px 40px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+        .modal h3 {
+            color: var(--accent-gold);
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+        }
+        .modal .modal-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+        .modal .modal-row label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .modal .modal-row input,
+        .modal .modal-row select,
+        .modal .modal-row textarea {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+            font-family: inherit;
+        }
+        .modal .modal-row textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .modal .modal-row input:focus,
+        .modal .modal-row select:focus,
+        .modal .modal-row textarea:focus {
+            outline: 2px solid var(--accent-gold);
+        }
+        .modal .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+        .modal .modal-actions .btn {
+            padding: 6px 20px;
+        }
+
+        /* ===== BUILDS PAGE ===== */
+        .builds-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .builds-header h2 {
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+        }
+        .builds-header .btn {
+            flex-shrink: 0;
+        }
+
+        .build-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+        .build-card {
+            background: var(--bg-card);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: 0.2s, background 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+        .build-card:hover {
+            border-color: var(--accent-gold);
+            background: var(--bg-hover);
+        }
+        .build-card .build-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .build-card .build-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .build-card .build-tags .tag {
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .build-card .build-progress-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .build-card .build-progress-tag.wishlist {
+            color: var(--build-wishlist);
+            border: 1px solid var(--build-wishlist);
+        }
+        .build-card .build-progress-tag.in-progress {
+            color: var(--build-progress);
+            border: 1px solid var(--build-progress);
+        }
+        .build-card .build-progress-tag.done {
+            color: var(--build-done);
+            border: 1px solid var(--build-done);
+        }
+        .build-card .build-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+        .build-card .build-actions button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .build-card .build-actions button:hover {
+            color: var(--accent-gold);
+            background: var(--bg-hover);
+        }
+        .build-card .build-actions .delete-build-btn:hover {
+            color: var(--accent-red);
+        }
+
+        /* Build Detail View */
+        .build-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .build-detail-header .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .build-detail-header .back-btn:hover {
+            color: var(--accent-gold);
+        }
+        .build-detail-header .build-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+        .build-detail-header .build-title .progress-tag {
+            font-size: 0.8rem;
+            margin-left: 10px;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .build-detail-header .build-title .progress-tag.wishlist {
+            color: var(--build-wishlist);
+            border: 1px solid var(--build-wishlist);
+        }
+        .build-detail-header .build-title .progress-tag.in-progress {
+            color: var(--build-progress);
+            border: 1px solid var(--build-progress);
+        }
+        .build-detail-header .build-title .progress-tag.done {
+            color: var(--build-done);
+            border: 1px solid var(--build-done);
+        }
+
+        /* Box Container */
+        .box-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 8px 0;
+            min-height: 120px;
+            position: relative;
+        }
+        .box-container.drag-over {
+            background: var(--bg-hover);
+            border-radius: 12px;
+            border: 2px dashed var(--accent-gold);
+        }
+
+        .build-box {
+            background: var(--bg-task);
+            border-radius: 10px;
+            padding: 12px 16px;
+            min-width: 140px;
+            max-width: 180px;
+            border: 2px solid var(--border-color);
+            cursor: grab;
+            transition: 0.2s, border-color 0.3s, background 0.3s, transform 0.2s;
+            position: relative;
+            user-select: none;
+            flex: 0 0 auto;
+        }
+        .build-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        .build-box:active {
+            cursor: grabbing;
+        }
+        .build-box.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+        .build-box .box-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+        .build-box .box-source {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .build-box .box-progress {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .build-box .box-progress.wishlist {
+            color: var(--build-wishlist);
+            border: 1px solid var(--build-wishlist);
+        }
+        .build-box .box-progress.in-progress {
+            color: var(--build-progress);
+            border: 1px solid var(--build-progress);
+        }
+        .build-box .box-progress.done {
+            color: var(--build-done);
+            border: 1px solid var(--build-done);
+        }
+        .build-box .box-progress:hover {
+            opacity: 0.7;
+        }
+        .build-box .box-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+        .build-box .box-actions button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .build-box .box-actions button:hover {
+            color: var(--accent-gold);
+            background: var(--bg-hover);
+        }
+        .build-box .box-actions .delete-box-btn:hover {
+            color: var(--accent-red);
+        }
+        .build-box .drag-handle {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            cursor: grab;
+            opacity: 0.4;
+            transition: 0.2s;
+        }
+        .build-box .drag-handle:hover {
+            opacity: 1;
+        }
+        .build-box .box-color-bar {
+            height: 4px;
+            border-radius: 0 0 4px 4px;
+            margin: 8px -16px -12px -16px;
+            transition: background 0.3s;
+        }
+        .build-box .box-color-bar.wishlist {
+            background: var(--build-wishlist);
+        }
+        .build-box .box-color-bar.in-progress {
+            background: var(--build-progress);
+        }
+        .build-box .box-color-bar.done {
+            background: var(--build-done);
+        }
+
+        .box-container .empty-msg {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Drag and drop visual feedback */
+        .box-container .drop-zone {
+            border: 2px dashed var(--accent-gold);
+            border-radius: 10px;
+            min-width: 100px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 12px;
+            flex: 0 0 auto;
+        }
+        .box-container .drop-zone.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -1287,6 +1683,7 @@
                     <select id="profileSelect"></select>
                     <button class="btn btn-sm btn-primary" id="addProfileBtn">+</button>
                     <button class="btn btn-sm btn-danger" id="deleteProfileBtn">✕</button>
+                    <button class="edit-profile-btn" id="editProfileBtn" title="Edit profile">✎</button>
                 </div>
             </div>
             <h1>⚔️ T&amp;L Tracker</h1>
@@ -1535,11 +1932,11 @@
                 <div class="guide-accordion-body">
                     <p>Here's how to get the most out of your T&amp;L Tracker:</p>
                     <ul>
-                        <li><strong>Profiles:</strong> Use the dropdown at the top left to switch between characters. Click <strong>+</strong> to add a new character (max 6).</li>
+                        <li><strong>Profiles:</strong> Use the dropdown at the top left to switch between characters. Click <strong>+</strong> to add a new character (max 6). Click <strong>✎</strong> to edit the profile name and server.</li>
                         <li><strong>Daily/Weekly/Monthly Tasks:</strong> Check off tasks as you complete them. Tasks with counters (like "Co-op Dungeons") let you track partial progress with <strong>+</strong> and <strong>−</strong> buttons.</li>
                         <li><strong>Custom Tasks:</strong> Add your own tasks with optional countdown timers. The timer starts when you check the task as done.</li>
                         <li><strong>Shop Hints:</strong> Hover over the 📍 icon next to a task to see where to buy that item.</li>
-                        <li><strong>Progress Bars:</strong> The left sidebar shows your overall progress for each category.</li>
+                        <li><strong>Progress Bars:</strong> The left sidebar shows your overall progress for each category. Tasks are counted as done when checked OR when the counter reaches max.</li>
                         <li><strong>Countdown Timers:</strong> The right sidebar shows time remaining until each reset.</li>
                         <li><strong>Reset Categories:</strong> Click the ↺ button in any section header to reset that category to its default tasks.</li>
                         <li><strong>Themes:</strong> Switch between Dark, Light, and T&amp;L (purple/gold) themes using the buttons in the top-right.</li>
@@ -1557,10 +1954,38 @@
         <!-- PAGE: BUILDS -->
         <!-- ========================================================= -->
         <div class="page" id="page-builds">
-            <h2 style="color:var(--accent-gold); margin-bottom:14px;">⚔️ Builds</h2>
-            <div class="coming-soon-box">
-                <h3>⚔️ Build Saver Coming Soon</h3>
-                <p>Save and manage your character builds, weapon combos, and skill setups.</p>
+            <div id="buildsListView">
+                <div class="builds-header">
+                    <h2>📋 My Builds</h2>
+                    <button class="btn btn-primary" id="addBuildBtn">+ Add Build</button>
+                </div>
+                <div class="build-grid" id="buildsGrid">
+                    <!-- Build cards will be rendered here -->
+                </div>
+            </div>
+
+            <div id="buildDetailView" style="display:none;">
+                <div class="build-detail-header">
+                    <div>
+                        <button class="back-btn" id="backToBuildsBtn">← Back to Builds</button>
+                        <span class="build-title" id="buildDetailTitle">
+                            <span id="buildDetailName"></span>
+                            <span class="progress-tag" id="buildDetailProgressTag"></span>
+                        </span>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-warning" id="editBuildBtn">✎ Edit Build</button>
+                        <button class="btn btn-sm btn-danger" id="deleteBuildBtn">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="box-container" id="boxContainer">
+                    <!-- Boxes will be rendered here -->
+                </div>
+                <div style="margin-top:16px;">
+                    <button class="btn btn-primary btn-sm" id="addItemBtn">+ Add Item</button>
+                    <button class="btn btn-warning btn-sm" id="moveUpBtn" style="margin-left:8px;">↑ Move Up</button>
+                    <button class="btn btn-warning btn-sm" id="moveDownBtn">↓ Move Down</button>
+                </div>
             </div>
         </div>
 
@@ -1638,6 +2063,74 @@
             </div>
         </div>
 
+        <!-- ========================================================= -->
+        <!-- MODALS -->
+        <!-- ========================================================= -->
+        <!-- Profile Modal -->
+        <div class="modal-overlay" id="profileModal">
+            <div class="modal">
+                <h3 id="profileModalTitle">Edit Profile</h3>
+                <div class="modal-row">
+                    <label>Profile Name</label>
+                    <input type="text" id="modalProfileName" placeholder="e.g. Noctzy" />
+                </div>
+                <div class="modal-row">
+                    <label>Server</label>
+                    <input type="text" id="modalServer" placeholder="e.g. EU - Starfall" />
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-warning" id="profileModalCancelBtn">Cancel</button>
+                    <button class="btn btn-primary" id="profileModalSaveBtn">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Build Modal -->
+        <div class="modal-overlay" id="buildModal">
+            <div class="modal">
+                <h3 id="buildModalTitle">Add Build</h3>
+                <div class="modal-row">
+                    <label>Build Name</label>
+                    <input type="text" id="buildModalName" placeholder="e.g. PvE Greatsword/Dagger" />
+                </div>
+                <div class="modal-row">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" id="buildModalTags" placeholder="e.g. World Boss, Dungeon" />
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-warning" id="buildModalCancelBtn">Cancel</button>
+                    <button class="btn btn-primary" id="buildModalSaveBtn">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Modal -->
+        <div class="modal-overlay" id="itemModal">
+            <div class="modal">
+                <h3 id="itemModalTitle">Add Item</h3>
+                <div class="modal-row">
+                    <label>Item Name</label>
+                    <input type="text" id="itemModalName" placeholder="e.g. Adentus Greatsword" />
+                </div>
+                <div class="modal-row">
+                    <label>Source</label>
+                    <input type="text" id="itemModalSource" placeholder="e.g. World Boss" />
+                </div>
+                <div class="modal-row">
+                    <label>Cost</label>
+                    <input type="text" id="itemModalCost" placeholder="e.g. 125 Lucent" />
+                </div>
+                <div class="modal-row">
+                    <label>Note</label>
+                    <textarea id="itemModalNote" placeholder="Optional note..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-warning" id="itemModalCancelBtn">Cancel</button>
+                    <button class="btn btn-primary" id="itemModalSaveBtn">Save</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -1670,6 +2163,10 @@
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 this.classList.add('active');
                 document.getElementById('page-' + this.dataset.page).classList.add('active');
+                // Render builds when switching to builds tab
+                if (this.dataset.page === 'builds') {
+                    renderBuilds();
+                }
             });
         });
 
@@ -1690,21 +2187,21 @@
 
         function getProfiles() {
             try {
-                const raw = localStorage.getItem('tl_profiles');
-                return raw ? JSON.parse(raw) : ['Character 1'];
-            } catch (_) { return ['Character 1']; }
+                const raw = localStorage.getItem('tl_profiles_v2');
+                return raw ? JSON.parse(raw) : [{ name: 'Character 1', server: '' }];
+            } catch (_) { return [{ name: 'Character 1', server: '' }]; }
         }
 
         function saveProfiles(profiles) {
-            localStorage.setItem('tl_profiles', JSON.stringify(profiles));
+            localStorage.setItem('tl_profiles_v2', JSON.stringify(profiles));
         }
 
-        function getCurrentProfile() {
-            return localStorage.getItem('tl_current_profile') || 'Character 1';
+        function getCurrentProfileName() {
+            return localStorage.getItem('tl_current_profile_v2') || 'Character 1';
         }
 
-        function setCurrentProfile(name) {
-            localStorage.setItem('tl_current_profile', name);
+        function setCurrentProfileName(name) {
+            localStorage.setItem('tl_current_profile_v2', name);
         }
 
         function getProfileData(profileName) {
@@ -1733,72 +2230,167 @@
         function renderProfiles() {
             const select = document.getElementById('profileSelect');
             const profiles = getProfiles();
-            const current = getCurrentProfile();
+            const current = getCurrentProfileName();
             select.innerHTML = '';
             profiles.forEach(p => {
                 const opt = document.createElement('option');
-                opt.value = p;
-                opt.textContent = p;
-                if (p === current) opt.selected = true;
+                const displayName = p.server ? p.name + ' - ' + p.server : p.name;
+                opt.value = p.name;
+                opt.textContent = displayName;
+                if (p.name === current) opt.selected = true;
                 select.appendChild(opt);
             });
-            if (!profiles.includes(current)) {
-                profiles.push(current);
+            if (!profiles.some(p => p.name === current)) {
+                const newProfile = { name: current, server: '' };
+                profiles.push(newProfile);
                 saveProfiles(profiles);
                 renderProfiles();
             }
         }
 
         document.getElementById('profileSelect').addEventListener('change', function() {
-            setCurrentProfile(this.value);
+            setCurrentProfileName(this.value);
             loadCurrentProfile();
             renderAll();
         });
 
-        document.getElementById('addProfileBtn').addEventListener('click', function() {
+        // ============================================================
+        //  PROFILE MODAL
+        // ============================================================
+        let editingProfileName = null;
+
+        function openProfileModal(profileName) {
             const profiles = getProfiles();
-            if (profiles.length >= MAX_PROFILES) {
-                alert('Maximum ' + MAX_PROFILES + ' profiles allowed.');
+            const profile = profiles.find(p => p.name === profileName);
+            if (!profile) return;
+
+            editingProfileName = profileName;
+            document.getElementById('profileModalTitle').textContent = 'Edit Profile';
+            document.getElementById('modalProfileName').value = profile.name;
+            document.getElementById('modalServer').value = profile.server || '';
+            document.getElementById('profileModal').classList.add('show');
+        }
+
+        function openAddProfileModal() {
+            editingProfileName = null;
+            document.getElementById('profileModalTitle').textContent = 'Add Profile';
+            document.getElementById('modalProfileName').value = '';
+            document.getElementById('modalServer').value = '';
+            document.getElementById('profileModal').classList.add('show');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('show');
+        }
+
+        function saveProfileModal() {
+            const nameInput = document.getElementById('modalProfileName');
+            const serverInput = document.getElementById('modalServer');
+            const newName = nameInput.value.trim();
+            const server = serverInput.value.trim();
+
+            if (!newName) {
+                alert('Please enter a profile name.');
                 return;
             }
-            const name = prompt('Enter character name:');
-            if (!name || name.trim() === '') return;
-            const trimmed = name.trim();
-            if (profiles.includes(trimmed)) {
-                alert('Profile "' + trimmed + '" already exists.');
-                return;
+
+            const profiles = getProfiles();
+
+            if (editingProfileName) {
+                const index = profiles.findIndex(p => p.name === editingProfileName);
+                if (index !== -1) {
+                    if (newName !== editingProfileName && profiles.some(p => p.name === newName)) {
+                        alert('A profile with this name already exists.');
+                        return;
+                    }
+                    if (newName !== editingProfileName) {
+                        const oldData = getProfileData(editingProfileName);
+                        const oldNotes = getProfileNotes(editingProfileName);
+                        if (oldData) saveProfileData(newName, oldData);
+                        if (oldNotes) saveProfileNotes(newName, oldNotes);
+                        localStorage.removeItem('tl_data_' + editingProfileName);
+                        localStorage.removeItem('tl_notes_' + editingProfileName);
+                    }
+                    profiles[index] = { name: newName, server: server };
+                    if (editingProfileName === getCurrentProfileName()) {
+                        setCurrentProfileName(newName);
+                    }
+                }
+            } else {
+                if (profiles.some(p => p.name === newName)) {
+                    alert('A profile with this name already exists.');
+                    return;
+                }
+                if (profiles.length >= MAX_PROFILES) {
+                    alert('Maximum ' + MAX_PROFILES + ' profiles allowed.');
+                    return;
+                }
+                profiles.push({ name: newName, server: server });
+                const emptyData = {
+                    tasks: { daily: [], weekly: [], monthly: [], custom: [] },
+                    settings: { notifyCustom: true, notifyDaily: false, notifyWeekly: false },
+                    builds: {}
+                };
+                saveProfileData(newName, emptyData);
+                setCurrentProfileName(newName);
             }
-            profiles.push(trimmed);
+
             saveProfiles(profiles);
-            setCurrentProfile(trimmed);
             renderProfiles();
-            const emptyData = {
-                tasks: { daily: [], weekly: [], monthly: [], custom: [] },
-                settings: { notifyCustom: true, notifyDaily: false, notifyWeekly: false }
-            };
-            saveProfileData(trimmed, emptyData);
             loadCurrentProfile();
             renderAll();
+            closeProfileModal();
+        }
+
+        document.getElementById('editProfileBtn').addEventListener('click', function() {
+            const current = getCurrentProfileName();
+            openProfileModal(current);
+        });
+
+        document.getElementById('addProfileBtn').addEventListener('click', function() {
+            openAddProfileModal();
+        });
+
+        document.getElementById('profileModalCancelBtn').addEventListener('click', closeProfileModal);
+        document.getElementById('profileModalSaveBtn').addEventListener('click', saveProfileModal);
+
+        document.getElementById('profileModal').addEventListener('click', function(e) {
+            if (e.target === this) closeProfileModal();
+        });
+
+        document.getElementById('modalProfileName').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('modalServer').focus();
+            }
+        });
+        document.getElementById('modalServer').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveProfileModal();
+            }
         });
 
         document.getElementById('deleteProfileBtn').addEventListener('click', function() {
             const profiles = getProfiles();
-            const current = getCurrentProfile();
+            const current = getCurrentProfileName();
             if (profiles.length <= 1) {
                 alert('Cannot delete the last profile.');
                 return;
             }
             if (!confirm('Delete profile "' + current + '" and all its data?')) return;
-            const index = profiles.indexOf(current);
-            profiles.splice(index, 1);
-            saveProfiles(profiles);
-            localStorage.removeItem('tl_data_' + current);
-            localStorage.removeItem('tl_notes_' + current);
-            const newCurrent = profiles[0];
-            setCurrentProfile(newCurrent);
-            renderProfiles();
-            loadCurrentProfile();
-            renderAll();
+            const index = profiles.findIndex(p => p.name === current);
+            if (index !== -1) {
+                profiles.splice(index, 1);
+                saveProfiles(profiles);
+                localStorage.removeItem('tl_data_' + current);
+                localStorage.removeItem('tl_notes_' + current);
+                const newCurrent = profiles[0].name;
+                setCurrentProfileName(newCurrent);
+                renderProfiles();
+                loadCurrentProfile();
+                renderAll();
+            }
         });
 
         // ============================================================
@@ -1815,22 +2407,25 @@
                 notifyCustom: true,
                 notifyDaily: false,
                 notifyWeekly: false
-            }
+            },
+            builds: {}
         };
         let currentProfileName = '';
 
         function loadCurrentProfile() {
-            currentProfileName = getCurrentProfile();
+            currentProfileName = getCurrentProfileName();
             const data = getProfileData(currentProfileName);
             if (data) {
                 state.tasks = data.tasks || { daily: [], weekly: [], monthly: [], custom: [] };
                 state.settings = data.settings || { notifyCustom: true, notifyDaily: false, notifyWeekly: false };
+                state.builds = data.builds || {};
                 ['daily', 'weekly', 'monthly', 'custom'].forEach(g => {
                     if (!state.tasks[g]) state.tasks[g] = [];
                 });
             } else {
                 state.tasks = getDefaultTasks();
                 state.settings = { notifyCustom: true, notifyDaily: false, notifyWeekly: false };
+                state.builds = {};
                 saveCurrentProfile();
             }
             document.getElementById('notesTextarea').value = getProfileNotes(currentProfileName);
@@ -1840,7 +2435,11 @@
         }
 
         function saveCurrentProfile() {
-            saveProfileData(currentProfileName, { tasks: state.tasks, settings: state.settings });
+            saveProfileData(currentProfileName, {
+                tasks: state.tasks,
+                settings: state.settings,
+                builds: state.builds
+            });
         }
 
         function getDefaultTasks() {
@@ -1874,7 +2473,7 @@
         }
 
         // ============================================================
-        //  DEFAULT TASKS (Numbers removed from names)
+        //  DEFAULT TASKS
         // ============================================================
         const DEFAULT_TASKS = {
             daily: [
@@ -1997,6 +2596,14 @@
             return 't_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
         }
 
+        function generateBuildId() {
+            return 'b_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+        }
+
+        function generateItemId() {
+            return 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+        }
+
         // ============================================================
         //  STORAGE HELPERS
         // ============================================================
@@ -2106,7 +2713,6 @@
                     }
                 });
 
-                // LEFT: Checkbox + Task Name
                 const left = document.createElement('div');
                 left.className = 'task-left';
 
@@ -2139,11 +2745,9 @@
 
                 li.appendChild(left);
 
-                // RIGHT: Counter (if hasCounter) + Pin + Actions
                 const right = document.createElement('div');
                 right.className = 'task-right';
 
-                // Counter - only show if hasCounter is true (maxCount > 1)
                 if (task.hasCounter && task.maxCount > 1) {
                     const maxCount = task.maxCount;
                     const counterGroup = document.createElement('div');
@@ -2219,7 +2823,6 @@
                     right.appendChild(counterGroup);
                 }
 
-                // Pin (📍) - always shown
                 const trigger = document.createElement('span');
                 trigger.className = 'shop-hint-trigger';
                 trigger.textContent = '📍';
@@ -2229,7 +2832,6 @@
                 trigger.appendChild(tooltip);
                 right.appendChild(trigger);
 
-                // Custom timer display (only for custom tasks)
                 if (group === 'custom' && task.customTimer) {
                     const timerDisplay = document.createElement('span');
                     timerDisplay.className = 'custom-timer-display';
@@ -2278,7 +2880,6 @@
                     right.appendChild(timerDisplay);
                 }
 
-                // Actions (Edit + Delete)
                 const actions = document.createElement('div');
                 actions.className = 'task-actions';
 
@@ -2300,7 +2901,6 @@
                     if (newLocation !== null) {
                         task.shopHint = newLocation.trim() || 'N/A';
                     }
-                    // If it's a default task, remove the isDefault flag so it doesn't get overwritten
                     if (task.isDefault) {
                         task.isDefault = false;
                     }
@@ -2348,8 +2948,12 @@
                 let done = 0;
                 tasks.forEach(t => {
                     const max = t.maxCount || 1;
-                    const val = getCounterValue(t.id);
-                    if (val >= max) done++;
+                    const counterVal = getCounterValue(t.id);
+                    const isChecked = getTaskState(t.id, group);
+                    
+                    if (isChecked || counterVal >= max) {
+                        done++;
+                    }
                     total++;
                 });
                 document.getElementById(group + 'Count').textContent = done + ' / ' + total;
@@ -2379,9 +2983,6 @@
             }
         }
 
-        // ============================================================
-        //  LIVE TIMERS
-        // ============================================================
         function startLiveTimers() {
             if (liveTimerInterval) clearInterval(liveTimerInterval);
             liveTimerInterval = setInterval(function() {
@@ -2585,7 +3186,7 @@
         }
 
         // ============================================================
-        //  ADD CUSTOM TASK (Main)
+        //  ADD CUSTOM TASK
         // ============================================================
         function addCustomTask() {
             const input = document.getElementById('customTaskInput');
@@ -2781,6 +3382,586 @@
         }
 
         // ============================================================
+        //  BUILD SYSTEM
+        // ============================================================
+        let currentBuildId = null;
+        let draggedItemId = null;
+        let dragOverItemId = null;
+
+        function getProgressColor(progress) {
+            switch (progress) {
+                case 'Wishlist': return 'wishlist';
+                case 'In Progress': return 'in-progress';
+                case 'Done': return 'done';
+                default: return 'wishlist';
+            }
+        }
+
+        function getProgressClass(progress) {
+            return getProgressColor(progress);
+        }
+
+        function renderBuilds() {
+            const grid = document.getElementById('buildsGrid');
+            const buildNames = Object.keys(state.builds);
+            
+            if (buildNames.length === 0) {
+                grid.innerHTML = '<div class="coming-soon-box"><h3>No Builds Yet</h3><p>Click "Add Build" to create your first build!</p></div>';
+                return;
+            }
+
+            let html = '';
+            buildNames.forEach(name => {
+                const build = state.builds[name];
+                const items = build.items || [];
+                // Determine overall progress color based on items
+                let overallProgress = 'Wishlist';
+                let allDone = true;
+                let anyInProgress = false;
+                let anyWishlist = false;
+                
+                items.forEach(item => {
+                    if (item.progress !== 'Done') allDone = false;
+                    if (item.progress === 'In Progress') anyInProgress = true;
+                    if (item.progress === 'Wishlist') anyWishlist = true;
+                });
+                
+                if (items.length === 0) {
+                    overallProgress = 'Wishlist';
+                } else if (allDone) {
+                    overallProgress = 'Done';
+                } else if (anyInProgress) {
+                    overallProgress = 'In Progress';
+                } else if (anyWishlist) {
+                    overallProgress = 'Wishlist';
+                } else {
+                    overallProgress = 'Wishlist';
+                }
+
+                const tags = build.tags || [];
+                const progressClass = getProgressClass(overallProgress);
+                
+                html += `
+                    <div class="build-card" data-build="${name}" onclick="openBuild('${name}')">
+                        <div class="build-name">${name}</div>
+                        <div class="build-tags">
+                            ${tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                            <span class="build-progress-tag ${progressClass}">● ${overallProgress}</span>
+                        </div>
+                        <div style="font-size:0.75rem;color:var(--text-muted);">${items.length} items</div>
+                        <div class="build-actions">
+                            <button onclick="event.stopPropagation(); editBuild('${name}')">✎</button>
+                            <button class="delete-build-btn" onclick="event.stopPropagation(); deleteBuild('${name}')">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        function openBuild(name) {
+            currentBuildId = name;
+            document.getElementById('buildsListView').style.display = 'none';
+            document.getElementById('buildDetailView').style.display = 'block';
+            
+            const build = state.builds[name];
+            if (!build) return;
+            
+            document.getElementById('buildDetailName').textContent = name;
+            
+            // Update progress tag
+            const items = build.items || [];
+            let overallProgress = 'Wishlist';
+            let allDone = true;
+            let anyInProgress = false;
+            let anyWishlist = false;
+            
+            items.forEach(item => {
+                if (item.progress !== 'Done') allDone = false;
+                if (item.progress === 'In Progress') anyInProgress = true;
+                if (item.progress === 'Wishlist') anyWishlist = true;
+            });
+            
+            if (items.length === 0) {
+                overallProgress = 'Wishlist';
+            } else if (allDone) {
+                overallProgress = 'Done';
+            } else if (anyInProgress) {
+                overallProgress = 'In Progress';
+            } else if (anyWishlist) {
+                overallProgress = 'Wishlist';
+            } else {
+                overallProgress = 'Wishlist';
+            }
+            
+            const progressTag = document.getElementById('buildDetailProgressTag');
+            const progressClass = getProgressClass(overallProgress);
+            progressTag.textContent = '● ' + overallProgress;
+            progressTag.className = 'progress-tag ' + progressClass;
+            progressTag.style.cursor = 'pointer';
+            progressTag.onclick = function(e) {
+                e.stopPropagation();
+                const newProgress = cycleProgress(overallProgress);
+                // Update all items to this progress
+                build.items.forEach(item => {
+                    item.progress = newProgress;
+                });
+                saveCurrentProfile();
+                renderBuilds();
+                openBuild(name);
+            };
+            
+            renderBoxes();
+        }
+
+        function renderBoxes() {
+            const container = document.getElementById('boxContainer');
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            const items = build.items || [];
+            const order = build.order || items.map(item => item.id);
+            
+            // Sort items by order
+            const sortedItems = order.map(id => items.find(item => item.id === id)).filter(Boolean);
+            
+            if (sortedItems.length === 0) {
+                container.innerHTML = '<div class="empty-msg">No items in this build yet. Click "Add Item" to get started!</div>';
+                return;
+            }
+            
+            let html = '';
+            sortedItems.forEach((item, index) => {
+                const progressClass = getProgressClass(item.progress);
+                html += `
+                    <div class="build-box" draggable="true" data-item-id="${item.id}" data-index="${index}" onclick="openItemModal('${item.id}')">
+                        <div class="drag-handle" onclick="event.stopPropagation();">⠿</div>
+                        <div class="box-name">${item.name}</div>
+                        <div class="box-source">${item.source || 'No source'}</div>
+                        <div class="box-progress ${progressClass}" onclick="event.stopPropagation(); toggleItemProgress('${item.id}')">● ${item.progress || 'Wishlist'}</div>
+                        <div class="box-actions">
+                            <button onclick="event.stopPropagation(); editItem('${item.id}')">✎</button>
+                            <button class="delete-box-btn" onclick="event.stopPropagation(); deleteItem('${item.id}')">✕</button>
+                        </div>
+                        <div class="box-color-bar ${progressClass}"></div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            
+            // Add drag and drop event listeners
+            container.querySelectorAll('.build-box').forEach(box => {
+                box.addEventListener('dragstart', handleDragStart);
+                box.addEventListener('dragend', handleDragEnd);
+                box.addEventListener('dragover', handleDragOver);
+                box.addEventListener('dragenter', handleDragEnter);
+                box.addEventListener('dragleave', handleDragLeave);
+                box.addEventListener('drop', handleDrop);
+            });
+        }
+
+        // ===== DRAG AND DROP =====
+        function handleDragStart(e) {
+            const itemId = this.dataset.itemId;
+            draggedItemId = itemId;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', itemId);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            // Remove drop zone highlights
+            document.querySelectorAll('.drop-zone').forEach(el => el.remove());
+            document.querySelectorAll('.build-box.drag-over').forEach(el => el.classList.remove('drag-over'));
+            draggedItemId = null;
+            dragOverItemId = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const container = document.getElementById('boxContainer');
+            
+            // Remove existing drop zones
+            container.querySelectorAll('.drop-zone').forEach(el => el.remove());
+            
+            // Find the box we're hovering over
+            const targetBox = this;
+            const targetId = targetBox.dataset.itemId;
+            const itemId = e.dataTransfer.getData('text/plain');
+            
+            if (itemId && targetId && itemId !== targetId) {
+                dragOverItemId = targetId;
+                targetBox.classList.add('drag-over');
+            }
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const container = document.getElementById('boxContainer');
+            container.querySelectorAll('.drop-zone').forEach(el => el.remove());
+            document.querySelectorAll('.build-box.drag-over').forEach(el => el.classList.remove('drag-over'));
+            
+            const itemId = e.dataTransfer.getData('text/plain');
+            const targetId = this.dataset.itemId;
+            
+            if (itemId && targetId && itemId !== targetId) {
+                reorderItems(itemId, targetId);
+            }
+        }
+
+        function reorderItems(itemId, targetId) {
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            const items = build.items || [];
+            const order = build.order || items.map(item => item.id);
+            
+            const sourceIndex = order.indexOf(itemId);
+            const targetIndex = order.indexOf(targetId);
+            
+            if (sourceIndex === -1 || targetIndex === -1) return;
+            
+            // Remove source
+            order.splice(sourceIndex, 1);
+            // Insert at target position
+            order.splice(targetIndex, 0, itemId);
+            
+            build.order = order;
+            saveCurrentProfile();
+            renderBoxes();
+            renderBuilds();
+        }
+
+        // ===== ITEM PROGRESS TOGGLE =====
+        function toggleItemProgress(itemId) {
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            const item = build.items.find(i => i.id === itemId);
+            if (!item) return;
+            
+            item.progress = cycleProgress(item.progress);
+            saveCurrentProfile();
+            renderBoxes();
+            renderBuilds();
+        }
+
+        function cycleProgress(current) {
+            const cycle = ['Wishlist', 'In Progress', 'Done'];
+            const index = cycle.indexOf(current);
+            return cycle[(index + 1) % cycle.length];
+        }
+
+        // ===== BUILD MODAL =====
+        let editingBuildName = null;
+
+        function openBuildModal(name) {
+            if (name) {
+                editingBuildName = name;
+                const build = state.builds[name];
+                document.getElementById('buildModalTitle').textContent = 'Edit Build';
+                document.getElementById('buildModalName').value = name;
+                document.getElementById('buildModalTags').value = (build.tags || []).join(', ');
+            } else {
+                editingBuildName = null;
+                document.getElementById('buildModalTitle').textContent = 'Add Build';
+                document.getElementById('buildModalName').value = '';
+                document.getElementById('buildModalTags').value = '';
+            }
+            document.getElementById('buildModal').classList.add('show');
+        }
+
+        function closeBuildModal() {
+            document.getElementById('buildModal').classList.remove('show');
+        }
+
+        function saveBuildModal() {
+            const nameInput = document.getElementById('buildModalName');
+            const tagsInput = document.getElementById('buildModalTags');
+            const name = nameInput.value.trim();
+            const tags = tagsInput.value.split(',').map(t => t.trim()).filter(t => t);
+            
+            if (!name) {
+                alert('Please enter a build name.');
+                return;
+            }
+            
+            if (editingBuildName) {
+                // Editing existing build
+                if (editingBuildName !== name && state.builds[name]) {
+                    alert('A build with this name already exists.');
+                    return;
+                }
+                const buildData = state.builds[editingBuildName];
+                delete state.builds[editingBuildName];
+                state.builds[name] = buildData;
+                state.builds[name].tags = tags;
+            } else {
+                // New build
+                if (state.builds[name]) {
+                    alert('A build with this name already exists.');
+                    return;
+                }
+                state.builds[name] = {
+                    tags: tags,
+                    items: [],
+                    order: []
+                };
+            }
+            
+            saveCurrentProfile();
+            renderBuilds();
+            closeBuildModal();
+            if (editingBuildName) {
+                openBuild(name);
+            }
+        }
+
+        // ===== ITEM MODAL =====
+        let editingItemId = null;
+
+        function openItemModal(itemId) {
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            if (itemId) {
+                const item = build.items.find(i => i.id === itemId);
+                if (!item) return;
+                editingItemId = itemId;
+                document.getElementById('itemModalTitle').textContent = 'Edit Item';
+                document.getElementById('itemModalName').value = item.name || '';
+                document.getElementById('itemModalSource').value = item.source || '';
+                document.getElementById('itemModalCost').value = item.cost || '';
+                document.getElementById('itemModalNote').value = item.note || '';
+            } else {
+                editingItemId = null;
+                document.getElementById('itemModalTitle').textContent = 'Add Item';
+                document.getElementById('itemModalName').value = '';
+                document.getElementById('itemModalSource').value = '';
+                document.getElementById('itemModalCost').value = '';
+                document.getElementById('itemModalNote').value = '';
+            }
+            document.getElementById('itemModal').classList.add('show');
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.remove('show');
+        }
+
+        function saveItemModal() {
+            const name = document.getElementById('itemModalName').value.trim();
+            const source = document.getElementById('itemModalSource').value.trim();
+            const cost = document.getElementById('itemModalCost').value.trim();
+            const note = document.getElementById('itemModalNote').value.trim();
+            
+            if (!name) {
+                alert('Please enter an item name.');
+                return;
+            }
+            
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            if (editingItemId) {
+                const item = build.items.find(i => i.id === editingItemId);
+                if (item) {
+                    item.name = name;
+                    item.source = source;
+                    item.cost = cost;
+                    item.note = note;
+                }
+            } else {
+                const newItem = {
+                    id: generateItemId(),
+                    name: name,
+                    source: source,
+                    cost: cost,
+                    note: note,
+                    progress: 'Wishlist'
+                };
+                build.items.push(newItem);
+                if (!build.order) build.order = [];
+                build.order.push(newItem.id);
+            }
+            
+            saveCurrentProfile();
+            renderBoxes();
+            renderBuilds();
+            closeItemModal();
+        }
+
+        // ===== ITEM ACTIONS =====
+        function editItem(itemId) {
+            openItemModal(itemId);
+        }
+
+        function deleteItem(itemId) {
+            if (!confirm('Delete this item?')) return;
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            build.items = build.items.filter(i => i.id !== itemId);
+            build.order = build.order.filter(id => id !== itemId);
+            
+            saveCurrentProfile();
+            renderBoxes();
+            renderBuilds();
+        }
+
+        // ===== BUILD ACTIONS =====
+        function editBuild(name) {
+            openBuildModal(name);
+        }
+
+        function deleteBuild(name) {
+            if (!confirm('Delete build "' + name + '" and all its items?')) return;
+            delete state.builds[name];
+            saveCurrentProfile();
+            renderBuilds();
+            if (currentBuildId === name) {
+                currentBuildId = null;
+                document.getElementById('buildsListView').style.display = 'block';
+                document.getElementById('buildDetailView').style.display = 'none';
+            }
+        }
+
+        // ===== MOVE UP/DOWN =====
+        function moveItemUp() {
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            // Find the first selected item (we'll use the last clicked item)
+            const selectedBox = document.querySelector('.build-box.drag-over');
+            if (!selectedBox) {
+                alert('Please drag an item first, or click and hold an item to move it.');
+                return;
+            }
+            
+            const itemId = selectedBox.dataset.itemId;
+            const order = build.order || build.items.map(item => item.id);
+            const index = order.indexOf(itemId);
+            if (index <= 0) return;
+            
+            [order[index], order[index - 1]] = [order[index - 1], order[index]];
+            build.order = order;
+            saveCurrentProfile();
+            renderBoxes();
+            renderBuilds();
+        }
+
+        function moveItemDown() {
+            const build = state.builds[currentBuildId];
+            if (!build) return;
+            
+            const selectedBox = document.querySelector('.build-box.drag-over');
+            if (!selectedBox) {
+                alert('Please drag an item first, or click and hold an item to move it.');
+                return;
+            }
+            
+            const itemId = selectedBox.dataset.itemId;
+            const order = build.order || build.items.map(item => item.id);
+            const index = order.indexOf(itemId);
+            if (index === -1 || index >= order.length - 1) return;
+            
+            [order[index], order[index + 1]] = [order[index + 1], order[index]];
+            build.order = order;
+            saveCurrentProfile();
+            renderBoxes();
+            renderBuilds();
+        }
+
+        // ============================================================
+        //  SETTINGS
+        // ============================================================
+        document.getElementById('saveSettingsBtn').addEventListener('click', function() {
+            state.settings.notifyCustom = document.getElementById('settingNotifyCustom').checked;
+            state.settings.notifyDaily = document.getElementById('settingNotifyDaily').checked;
+            state.settings.notifyWeekly = document.getElementById('settingNotifyWeekly').checked;
+            saveCurrentProfile();
+            alert('✅ Settings saved!');
+        });
+
+        // ============================================================
+        //  DATA MANAGEMENT
+        // ============================================================
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            const profiles = getProfiles();
+            const allData = {};
+            profiles.forEach(p => {
+                allData[p.name] = {
+                    data: getProfileData(p.name),
+                    notes: getProfileNotes(p.name)
+                };
+            });
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tl_tracker_backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importDataBtn').addEventListener('click', function() {
+            const input = document.getElementById('importDataInput');
+            if (!input.files || !input.files[0]) {
+                alert('Please select a backup file first.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!confirm('This will overwrite all current data. Continue?')) return;
+                    const profiles = Object.keys(data);
+                    const newProfiles = profiles.map(name => ({ name: name, server: '' }));
+                    profiles.forEach(p => {
+                        if (data[p].data) saveProfileData(p, data[p].data);
+                        if (data[p].notes !== undefined) saveProfileNotes(p, data[p].notes);
+                    });
+                    saveProfiles(newProfiles);
+                    setCurrentProfileName(profiles[0]);
+                    renderProfiles();
+                    loadCurrentProfile();
+                    renderAll();
+                    alert('✅ Data imported successfully!');
+                } catch (err) {
+                    alert('❌ Invalid backup file.');
+                }
+            };
+            reader.readAsText(input.files[0]);
+        });
+
+        document.getElementById('clearDataBtn').addEventListener('click', function() {
+            if (!confirm('⚠️ This will delete ALL data for ALL profiles. Are you sure?')) return;
+            if (!confirm('⚠️ This is permanent! Are you REALLY sure?')) return;
+            const profiles = getProfiles();
+            profiles.forEach(p => {
+                localStorage.removeItem('tl_data_' + p.name);
+                localStorage.removeItem('tl_notes_' + p.name);
+            });
+            localStorage.removeItem('tl_profiles_v2');
+            localStorage.removeItem('tl_current_profile_v2');
+            saveProfiles([{ name: 'Character 1', server: '' }]);
+            setCurrentProfileName('Character 1');
+            renderProfiles();
+            loadCurrentProfile();
+            renderAll();
+            alert('🗑️ All data cleared.');
+        });
+
+        // ============================================================
         //  NOTES
         // ============================================================
         document.getElementById('saveNotesBtn').addEventListener('click', function() {
@@ -2807,82 +3988,143 @@
         });
 
         // ============================================================
-        //  SETTINGS
+        //  BUILD EVENT LISTENERS
         // ============================================================
-        document.getElementById('saveSettingsBtn').addEventListener('click', function() {
-            state.settings.notifyCustom = document.getElementById('settingNotifyCustom').checked;
-            state.settings.notifyDaily = document.getElementById('settingNotifyDaily').checked;
-            state.settings.notifyWeekly = document.getElementById('settingNotifyWeekly').checked;
-            saveCurrentProfile();
-            alert('✅ Settings saved!');
+        document.getElementById('addBuildBtn').addEventListener('click', function() {
+            openBuildModal(null);
         });
 
-        // ============================================================
-        //  DATA MANAGEMENT
-        // ============================================================
-        document.getElementById('exportDataBtn').addEventListener('click', function() {
-            const profiles = getProfiles();
-            const allData = {};
-            profiles.forEach(p => {
-                allData[p] = {
-                    data: getProfileData(p),
-                    notes: getProfileNotes(p)
-                };
-            });
-            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'tl_tracker_backup.json';
-            a.click();
-            URL.revokeObjectURL(url);
+        document.getElementById('buildModalCancelBtn').addEventListener('click', closeBuildModal);
+        document.getElementById('buildModalSaveBtn').addEventListener('click', saveBuildModal);
+
+        document.getElementById('buildModal').addEventListener('click', function(e) {
+            if (e.target === this) closeBuildModal();
         });
 
-        document.getElementById('importDataBtn').addEventListener('click', function() {
-            const input = document.getElementById('importDataInput');
-            if (!input.files || !input.files[0]) {
-                alert('Please select a backup file first.');
-                return;
+        document.getElementById('buildModalName').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('buildModalTags').focus();
             }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (!confirm('This will overwrite all current data. Continue?')) return;
-                    const profiles = Object.keys(data);
-                    profiles.forEach(p => {
-                        if (data[p].data) saveProfileData(p, data[p].data);
-                        if (data[p].notes !== undefined) saveProfileNotes(p, data[p].notes);
-                    });
-                    saveProfiles(profiles);
-                    setCurrentProfile(profiles[0]);
-                    renderProfiles();
-                    loadCurrentProfile();
-                    renderAll();
-                    alert('✅ Data imported successfully!');
-                } catch (err) {
-                    alert('❌ Invalid backup file.');
-                }
-            };
-            reader.readAsText(input.files[0]);
+        });
+        document.getElementById('buildModalTags').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveBuildModal();
+            }
         });
 
-        document.getElementById('clearDataBtn').addEventListener('click', function() {
-            if (!confirm('⚠️ This will delete ALL data for ALL profiles. Are you sure?')) return;
-            if (!confirm('⚠️ This is permanent! Are you REALLY sure?')) return;
-            const profiles = getProfiles();
-            profiles.forEach(p => {
-                localStorage.removeItem('tl_data_' + p);
-                localStorage.removeItem('tl_notes_' + p);
-            });
-            localStorage.removeItem('tl_profiles');
-            localStorage.removeItem('tl_current_profile');
-            saveProfiles(['Character 1']);
-            setCurrentProfile('Character 1');
-            renderProfiles();
-            loadCurrentProfile();
-            renderAll();
-            alert('🗑️ All data cleared.');
+        document.getElementById('addItemBtn').addEventListener('click', function() {
+            openItemModal(null);
+        });
+
+        document.getElementById('itemModalCancelBtn').addEventListener('click', closeItemModal);
+        document.getElementById('itemModalSaveBtn').addEventListener('click', saveItemModal);
+
+        document.getElementById('itemModal').addEventListener('click', function(e) {
+            if (e.target === this) closeItemModal();
+        });
+
+        document.getElementById('itemModalName').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('itemModalSource').focus();
+            }
+        });
+        document.getElementById('itemModalSource').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('itemModalCost').focus();
+            }
+        });
+        document.getElementById('itemModalCost').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('itemModalNote').focus();
+            }
+        });
+        document.getElementById('itemModalNote').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                saveItemModal();
+            }
+        });
+
+        document.getElementById('backToBuildsBtn').addEventListener('click', function() {
+            currentBuildId = null;
+            document.getElementById('buildsListView').style.display = 'block';
+            document.getElementById('buildDetailView').style.display = 'none';
+            renderBuilds();
+        });
+
+        document.getElementById('editBuildBtn').addEventListener('click', function() {
+            if (currentBuildId) {
+                editBuild(currentBuildId);
+            }
+        });
+
+        document.getElementById('deleteBuildBtn').addEventListener('click', function() {
+            if (currentBuildId) {
+                deleteBuild(currentBuildId);
+            }
+        });
+
+        document.getElementById('moveUpBtn').addEventListener('click', function() {
+            // Find first selected or hovered box
+            const box = document.querySelector('.build-box.drag-over');
+            if (box) {
+                const itemId = box.dataset.itemId;
+                const build = state.builds[currentBuildId];
+                if (!build) return;
+                const order = build.order || build.items.map(item => item.id);
+                const index = order.indexOf(itemId);
+                if (index <= 0) return;
+                [order[index], order[index - 1]] = [order[index - 1], order[index]];
+                build.order = order;
+                saveCurrentProfile();
+                renderBoxes();
+                renderBuilds();
+            } else {
+                // If no box is selected, move the first item up (wrap around)
+                const build = state.builds[currentBuildId];
+                if (!build || build.items.length <= 1) return;
+                const order = build.order || build.items.map(item => item.id);
+                const firstId = order[0];
+                order.splice(0, 1);
+                order.push(firstId);
+                build.order = order;
+                saveCurrentProfile();
+                renderBoxes();
+                renderBuilds();
+            }
+        });
+
+        document.getElementById('moveDownBtn').addEventListener('click', function() {
+            const box = document.querySelector('.build-box.drag-over');
+            if (box) {
+                const itemId = box.dataset.itemId;
+                const build = state.builds[currentBuildId];
+                if (!build) return;
+                const order = build.order || build.items.map(item => item.id);
+                const index = order.indexOf(itemId);
+                if (index === -1 || index >= order.length - 1) return;
+                [order[index], order[index + 1]] = [order[index + 1], order[index]];
+                build.order = order;
+                saveCurrentProfile();
+                renderBoxes();
+                renderBuilds();
+            } else {
+                const build = state.builds[currentBuildId];
+                if (!build || build.items.length <= 1) return;
+                const order = build.order || build.items.map(item => item.id);
+                const lastId = order[order.length - 1];
+                order.splice(order.length - 1, 1);
+                order.unshift(lastId);
+                build.order = order;
+                saveCurrentProfile();
+                renderBoxes();
+                renderBuilds();
+            }
         });
 
         // ============================================================
@@ -2893,6 +4135,7 @@
             loadCurrentProfile();
             checkResets();
             renderAll();
+            renderBuilds();
 
             setInterval(function() {
                 updateCountdowns();
