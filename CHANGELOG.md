@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.0.5] - 2026-07-02
+
+### Added
+- **Back to Top button** – floating arrow appears when you scroll down
+- **Click title to go home** – clicking "T&L Tracker" takes you to the Home page
+- **Settings page redesign** – organized into topic boxes (Appearance, Default View, Server & Reset, Notifications, Data Management)
+- **Server & Reset Time** – select your server (EU, NA East, NA West, SA, JP, OCE) or set custom reset time
+- **Compact Mode** – smaller task rows and tighter spacing
+- **Font Size** – Small, Medium, Large options
+- **Hide Completed Tasks** – toggle to hide checked tasks from view
+- **Default View** – choose which tab opens when you start the tracker
+- **Confirm before auto-reset** – ask for confirmation before resetting tasks
+- **Edit custom task timer** – edit countdown time and date/time for custom tasks
+
+### Changed
+- Settings page now uses a grid layout with topic-based cards
+- All settings (including theme, default tab, font size, compact mode) are saved per profile
+- Export/Import backup now includes all settings and data in one file
+
+### Fixed
+- Custom tasks can now have their timer edited (countdown or date/time)
+- Auto-reset now asks for confirmation before resetting tasks
+
 ## [0.0.4] - 2026-06-29
 ### Added
 - Profile edit feature: Edit profile name and server via ✎ button
